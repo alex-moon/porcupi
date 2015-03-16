@@ -1,10 +1,10 @@
 Porcupi
 =======
 
-Basically yeah an excuse to fuck about a bit with the [Spark Framework](http://sparkjava.com).
+Basically yeah an excuse to fuck about a bit with [Spark](http://sparkjava.com), [OrmLite](http://ormlite.com/)
+and [GSON](https://code.google.com/p/google-gson/).
 
-The aim is to produce a tiny maintainable JSON/REST service that doesn't use Tomcat. Spark
-does REST its own way without Jackson so the whole thing might be a bit bogus but there's
-only one way to find out.
-
-Smashin it.
+The aim is to produce a tiny maintainable JSON/REST framework that doesn't use Tomcat. Spark uses Jetty 
+nice and transparently - all we've gotta do is build a bit of a project skeleton. By the way, it appears
+someone's [already had a go at this](http://www.boxuk.com/blog/creating-rest-api-quickly-using-pure-java/)
+with some success...
