@@ -9,11 +9,11 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 
 public class Controller {
-    protected static Dao<Model, String> getDao(Class klass) throws SQLException {
+    protected static Dao<? extends Model, ?> getDao(Class<? extends Model> klass) throws SQLException {
         return DaoManager.createDao(Config.getDb(), klass);
     }
     
-    protected static List query(Class klass, String fieldname, Object value) throws SQLException {
+    protected static List<? extends Model> query(Class<? extends Model> klass, String fieldname, Object value) throws SQLException {
         return getDao(klass).queryForEq(fieldname, value);
     }
 }
