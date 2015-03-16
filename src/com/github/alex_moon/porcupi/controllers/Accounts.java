@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import spark.Spark;
 
 import com.github.alex_moon.porcupi.models.Account;
-import com.github.alex_moon.porcupi.responses.Response;
 
 public class Accounts extends Controller {
     public Accounts() {
@@ -21,6 +20,16 @@ public class Accounts extends Controller {
                     "Could not find account number \"%s\"",
                     accountNumber
                 ));
+            }
+            return success(account);
+        });
+
+        Spark.post("/account/", (request, response) -> {
+            Account account = gson.fromJson(request.body(), Account.class);
+            if (account.getId() == null) {
+                create(Account.class, account);
+            } else {
+                update(Account.class, account);
             }
             return success(account);
         });
