@@ -13,13 +13,13 @@ import com.j256.ormlite.dao.DaoManager;
 public class Controller {
     protected static Gson gson = new Gson();
     
-    public String getSuccessResponse(Object object) {
+    public String success(Object object) {
         Response response = Response.getSuccessResponse();
         response.setObject(object);
         return gson.toJson(response);
     }
     
-    public String getErrorResponse(String message) {
+    public String error(String message) {
         Response response = Response.getErrorResponse();
         response.setMessage(message);
         return gson.toJson(response);

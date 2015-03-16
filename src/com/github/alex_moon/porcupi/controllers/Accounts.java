@@ -10,19 +10,19 @@ import com.github.alex_moon.porcupi.responses.Response;
 public class Accounts extends Controller {
     public Accounts() {
         Spark.get("/", (request, response) -> {
-            return Response.getSuccessResponse();
+            return success("Welcome to Porcupi!");
         });
 
         Spark.get("/account/:accountNumber/", (request, response) -> {
             String accountNumber = request.params(":accountNumber");
             Account account = getByAccountNumber(accountNumber);
             if (account == null) {
-                return getErrorResponse(String.format(
+                return error(String.format(
                     "Could not find account number \"%s\"",
                     accountNumber
                 ));
             }
-            return getSuccessResponse(account);
+            return success(account);
         });
     }
 
