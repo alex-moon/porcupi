@@ -5,20 +5,24 @@ import java.sql.SQLException;
 import spark.Spark;
 
 import com.github.alex_moon.porcupi.models.Account;
+import com.github.alex_moon.porcupi.responses.Response;
 
 public class Accounts extends Controller {
     public Accounts() {
         Spark.get("/", (request, response) -> {
-            return "You doed it lol";
+            return Response.getSuccessResponse();
         });
 
-        Spark.get("/account/:accountNumber", (request, response) -> {
+        Spark.get("/account/:accountNumber/", (request, response) -> {
             String accountNumber = request.params(":accountNumber");
             Account account = getByAccountNumber(accountNumber);
             if (account == null) {
-                return String.format("Sorry, we couldn't find account number '%s'", accountNumber);
+                return getErrorResponse(String.format(
+                    "Could not find account number \"%s\"",
+                    accountNumber
+                ));
             }
-            return account.doAThing();
+            return getSuccessResponse(account);
         });
     }
 
