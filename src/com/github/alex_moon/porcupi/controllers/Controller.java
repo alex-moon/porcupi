@@ -1,10 +1,10 @@
 package com.github.alex_moon.porcupi.controllers;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.github.alex_moon.porcupi.Config;
-import com.github.alex_moon.porcupi.models.Account;
 import com.github.alex_moon.porcupi.models.Model;
 import com.github.alex_moon.porcupi.responses.Response;
 import com.google.gson.Gson;
@@ -13,7 +13,26 @@ import com.j256.ormlite.dao.DaoManager;
 
 public class Controller {
     protected static Gson gson = new Gson();
+    protected List<Handler> handlers = new ArrayList<Handler>();
 
+
+    // pub-sub stuff
+    public void registerHandler(Handler handler) {
+        handlers.add(handler);
+    }
+    
+    public List<String> handle(String key, Object data) {
+        List<String> results = new ArrayList<String>();
+        for (Handler handler : handlers) {
+            if (handler.canHandle(key)) {
+                results.add(handler.handle(key, data));
+            }
+        }
+        return results;
+    }
+
+
+    // json response stuff
     public String success(Object object) {
         Response response = Response.getSuccessResponse();
         response.setObject(object);
@@ -26,6 +45,8 @@ public class Controller {
         return gson.toJson(response);
     }
 
+
+    // data-layer stuff - @todo put elsewhere
     protected static Dao<? extends Model, ?> getDao(Class<? extends Model> klass) throws SQLException {
         return DaoManager.createDao(Config.getDb(), klass);
     }

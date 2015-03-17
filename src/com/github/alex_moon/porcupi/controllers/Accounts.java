@@ -7,6 +7,8 @@ import spark.Spark;
 import com.github.alex_moon.porcupi.models.Account;
 
 public class Accounts extends Controller {
+    private Boolean exampleFlag = false;
+
     public Accounts() {
         Spark.get("/", (request, response) -> {
             return success("Welcome to Porcupi!");
@@ -21,6 +23,7 @@ public class Accounts extends Controller {
                     accountNumber
                 ));
             }
+            if (exampleFlag) { return success("Account is hidden (for example)"); }
             return success(account);
         });
 
@@ -33,6 +36,25 @@ public class Accounts extends Controller {
             }
             return success(account);
         });
+        
+        registerHandler(new ExampleHandler());
+    }
+    
+    private class ExampleHandler implements Handler {
+        public String handle(String key, Object data) {
+            if (key.equals("example")) {
+                exampleFlag = !exampleFlag;
+                return "success: exampleFlag is now " + exampleFlag;
+            }
+            return null;
+        }
+        
+        public Boolean canHandle(String key) {
+            if (key.equals("example")) {
+                return true;
+            }
+            return false;
+        }
     }
 
     public static Account getByAccountNumber(String accountNumber) {

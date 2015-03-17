@@ -31,4 +31,6 @@ public class Config {
         }
         return db;
     }
+    
+    public static Integer managerPort = 6969;
 }
