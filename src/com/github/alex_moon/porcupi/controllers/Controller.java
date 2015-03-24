@@ -2,16 +2,19 @@ package com.github.alex_moon.porcupi.controllers;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.github.alex_moon.porcupi.Config;
+import com.github.alex_moon.porcupi.manager.Pokeable;
 import com.github.alex_moon.porcupi.models.Model;
 import com.github.alex_moon.porcupi.responses.Response;
 import com.google.gson.Gson;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 
-public class Controller {
+public class Controller implements Pokeable {
     protected static Gson gson = new Gson();
     protected List<Handler> handlers = new ArrayList<Handler>();
 
@@ -75,5 +78,11 @@ public class Controller {
             e.printStackTrace();
             return 0;
         }
+    }
+    
+    public Map<String, Object> poke() {
+        Map<String, Object> results = new HashMap<String, Object>();
+        results.put("className", "Controller");
+        return results;
     }
 }
