@@ -1,12 +1,11 @@
 package com.github.alex_moon.porcupi.controllers;
 
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
 import spark.Spark;
 
 import com.github.alex_moon.porcupi.models.Account;
+import com.github.alex_moon.porcupi.services.AccountService;
 import com.github.alex_moon.porcupi.views.AccountView;
 
 public class AccountController extends Controller {
@@ -25,9 +24,9 @@ public class AccountController extends Controller {
 
     public void getOrCreate(Account account) {
         if (account.getId() == null) {
-            create(Account.class, account);
+            AccountService.create(Account.class, account);
         } else {
-            update(Account.class, account);
+            AccountService.update(Account.class, account);
         }
     }
 
@@ -47,7 +46,7 @@ public class AccountController extends Controller {
 
     public static Account getByAccountNumber(String accountNumber) {
         try {
-            return (Account) query(Account.class, "account_number", accountNumber).get(0);
+            return (Account) AccountService.query(Account.class, "account_number", accountNumber).get(0);
         } catch (SQLException e) {
             e.printStackTrace();
             return null;

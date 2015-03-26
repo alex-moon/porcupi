@@ -63,11 +63,6 @@ public class ManagerThread extends Thread {
                 }
             }
             System.out.println("poke!");
-            for (Pokeable pokeable : Poke.getPokeables()) {
-                for (Entry<String, Object> entry : pokeable.poke().entrySet()) {
-                    out.println(String.format("poke|%s|%s", entry.getKey(), entry.getValue()));
-                }
-            }
         }
     }
     
