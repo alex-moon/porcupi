@@ -3,7 +3,7 @@ package com.github.alex_moon.porcupi;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.alex_moon.porcupi.controllers.Accounts;
+import com.github.alex_moon.porcupi.controllers.AccountController;
 import com.github.alex_moon.porcupi.controllers.Controller;
 import com.github.alex_moon.porcupi.manager.Manager;
 import com.github.alex_moon.porcupi.manager.ManagerClient;
@@ -15,7 +15,7 @@ class Porcupi {
         if (args.length > 0 && args[0].equals("shell")) {
             new ManagerClient();
         } else {
-            modules.add(new Accounts());
+            modules.add(new AccountController());
             new Manager(modules);
         }
     }

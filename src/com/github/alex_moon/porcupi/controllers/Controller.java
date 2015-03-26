@@ -15,7 +15,6 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 
 public class Controller implements Pokeable {
-    protected static Gson gson = new Gson();
     protected List<Handler> handlers = new ArrayList<Handler>();
 
 
@@ -32,20 +31,6 @@ public class Controller implements Pokeable {
             }
         }
         return results;
-    }
-
-
-    // json response stuff
-    public String success(Object object) {
-        Response response = Response.getSuccessResponse();
-        response.setObject(object);
-        return gson.toJson(response);
-    }
-
-    public String error(String message) {
-        Response response = Response.getErrorResponse();
-        response.setMessage(message);
-        return gson.toJson(response);
     }
 
 
