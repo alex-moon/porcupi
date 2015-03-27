@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.github.alex_moon.porcupi.controllers.AccountController;
 import com.github.alex_moon.porcupi.controllers.Controller;
-import com.github.alex_moon.porcupi.manager.Manager;
+import com.github.alex_moon.porcupi.manager.ManagerServer;
 import com.github.alex_moon.porcupi.manager.ManagerClient;
 
 class Porcupi {
@@ -16,7 +16,7 @@ class Porcupi {
             new ManagerClient();
         } else {
             modules.add(new AccountController());
-            new Manager(modules);
+            new ManagerServer(modules);
         }
     }
 }

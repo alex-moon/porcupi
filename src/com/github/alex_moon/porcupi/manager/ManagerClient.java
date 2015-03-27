@@ -6,35 +6,29 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.github.alex_moon.porcupi.Config;
 
-public class ManagerClient {
+public class ManagerClient implements Manager {
     public ManagerClient() {
-        try (
-            Socket socket = new Socket("127.0.0.1", Config.managerPort);
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        ) {
+        Socket socket;
+        Transport transport;
+        try {
+            socket = new Socket("127.0.0.1", Config.managerPort);
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-            String fromServer;
-            String fromUser;
- 
-            System.out.println("Got a connection");
-            while ((fromUser = stdIn.readLine()) != null) {
-                System.out.println("Client: " + fromUser);
-                out.println(fromUser);
-
-                if ((fromServer = in.readLine()) != null) {
-                    System.out.println("Server: " + fromServer);
-                } else {
-                    break;
-                }
-            }
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
+            transport = new Transport(socket, this);
+        } catch (UnknownHostException e1) {
+            System.out.println("Couldn't find 127.0.0.1, viz. you've broken shit you stupid noob");
+            System.exit(2);
         } catch (IOException e) {
             e.printStackTrace();
+            System.exit(2);
         }
+    }
+    
+    public List<String> manage(String inputLine) {
+        return new ArrayList<String>();
     }
 }
