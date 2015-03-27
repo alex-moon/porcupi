@@ -10,8 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.alex_moon.porcupi.Config;
+import com.github.alex_moon.porcupi.transport.Transport;
 
 public class ManagerClient implements Manager {
+    private String inputLine;
+
     public ManagerClient() {
         Socket socket;
         Transport transport;
@@ -19,6 +22,11 @@ public class ManagerClient implements Manager {
             socket = new Socket("127.0.0.1", Config.managerPort);
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
             transport = new Transport(socket, this);
+            transport.start();
+            while ((inputLine = stdIn.readLine()) != null) {
+                transport.tell(inputLine);
+            }
+            socket.close();
         } catch (UnknownHostException e1) {
             System.out.println("Couldn't find 127.0.0.1, viz. you've broken shit you stupid noob");
             System.exit(2);
@@ -29,6 +37,7 @@ public class ManagerClient implements Manager {
     }
     
     public List<String> manage(String inputLine) {
-        return new ArrayList<String>();
+        System.out.println("lol recieved: " + inputLine);
+        return null;
     }
 }

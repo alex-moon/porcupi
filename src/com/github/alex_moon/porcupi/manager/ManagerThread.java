@@ -1,15 +1,9 @@
 package com.github.alex_moon.porcupi.manager;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.List;
-import java.util.Map.Entry;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.github.alex_moon.porcupi.transport.Transport;
 
 public class ManagerThread extends Thread implements Manager {
     private ManagerServer server;
@@ -23,11 +17,17 @@ public class ManagerThread extends Thread implements Manager {
     }
     
     public void run() {
-        Transport transport = new Transport(socket, this);
+        try {
+            Transport transport = new Transport(socket, this);
+            transport.start();
+            transport.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         server.remove(this);
     }
     
     public List<String> manage(String inputLine) {
-        return server.tell(inputLine, null);
+        return server.manage(inputLine, null);
     }
 }

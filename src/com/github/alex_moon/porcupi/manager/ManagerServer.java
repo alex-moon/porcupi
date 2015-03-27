@@ -38,7 +38,8 @@ public class ManagerServer {
         threads.remove(thread);
     }
     
-    public List<String> tell(String key, Object data) {
+    public List<String> manage(String key, Object data) {
+        System.out.println("lol received: " + key);
         List<String> results = new ArrayList<String>();
         for (Controller module : modules) {
             for (String result : module.handle(key, data)) {
