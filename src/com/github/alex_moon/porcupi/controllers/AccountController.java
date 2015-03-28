@@ -13,8 +13,6 @@ public class AccountController extends Controller {
 
     public AccountController() {
         AccountView accountView = new AccountView(this);
-        Spark.get("/account/:accountNumber/", accountView::getAccount);
-        Spark.post("/account/", accountView::postAccount);
         registerHandler(new ExampleHandler());
     }
 
