@@ -12,8 +12,8 @@ public class AccountView extends View {
     
     public AccountView(AccountController controller) {
         this.controller = controller;
-        get("/account/:accountNumber/", "getAccount", this::getAccount);
-        post("/account/", "postAccount", this::postAccount);
+        get("/account/:accountNumber/", "account:get", this::getAccount);
+        post("/account/", "account:post", this::postAccount);
     }
     
     public String getAccount(Request request, Response response) {

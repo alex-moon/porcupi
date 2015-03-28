@@ -2,8 +2,6 @@ package com.github.alex_moon.porcupi.controllers;
 
 import java.sql.SQLException;
 
-import spark.Spark;
-
 import com.github.alex_moon.porcupi.models.Account;
 import com.github.alex_moon.porcupi.services.AccountService;
 import com.github.alex_moon.porcupi.views.AccountView;
@@ -12,7 +10,8 @@ public class AccountController extends Controller {
     private Boolean exampleFlag = false;
 
     public AccountController() {
-        AccountView accountView = new AccountView(this);
+        super();
+        new AccountView(this);
         registerHandler(new ExampleHandler());
     }
 

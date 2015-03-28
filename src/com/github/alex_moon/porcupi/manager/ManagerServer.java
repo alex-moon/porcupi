@@ -9,17 +9,17 @@ import com.github.alex_moon.porcupi.Config;
 import com.github.alex_moon.porcupi.controllers.Controller;
 
 public class ManagerServer {
-    private static ManagerServer manager;
+    private static ManagerServer server;
     private List<ManagerThread> threads = new ArrayList<ManagerThread>();
     private List<Controller> modules;
     private ServerSocket serverSocket;
     
-    public static ManagerServer getManager() {
-        return manager;
+    public static ManagerServer get() {
+        return server;
     }
     
     public ManagerServer(List<Controller> modules) {
-        manager = this;
+        server = this;
         this.modules = modules;
         try {
             serverSocket = new ServerSocket(Config.managerPort);
@@ -38,8 +38,8 @@ public class ManagerServer {
         threads.remove(thread);
     }
     
-    public List<String> manage(String key, Object data) {
-        System.out.println("lol received: " + key);
+    public List<String> manage(Thread thread, String key, Object data) {
+        System.out.println("received from client: " + key);
         List<String> results = new ArrayList<String>();
         for (Controller module : modules) {
             for (String result : module.handle(key, data)) {

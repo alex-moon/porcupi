@@ -37,7 +37,7 @@ public class ManagerClient implements Manager {
     }
     
     public List<String> manage(String inputLine) {
-        System.out.println("lol recieved: " + inputLine);
+        System.out.println("received from server: " + inputLine);
         return null;
     }
 }

@@ -28,6 +28,6 @@ public class ManagerThread extends Thread implements Manager {
     }
     
     public List<String> manage(String inputLine) {
-        return server.manage(inputLine, null);
+        return server.manage(this, inputLine, null);
     }
 }
