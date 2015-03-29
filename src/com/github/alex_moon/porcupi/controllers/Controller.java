@@ -3,6 +3,8 @@ package com.github.alex_moon.porcupi.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.alex_moon.porcupi.controllers.Handler;
+
 public class Controller {
     protected List<Handler> handlers = new ArrayList<Handler>();
     

@@ -3,6 +3,7 @@ package com.github.alex_moon.porcupi.views;
 import spark.Request;
 import spark.Response;
 
+import com.github.alex_moon.porcupi.views.View;
 import com.github.alex_moon.porcupi.controllers.AccountController;
 import com.github.alex_moon.porcupi.models.Account;
 

@@ -3,6 +3,7 @@ package com.github.alex_moon.porcupi.manager;
 import java.net.Socket;
 import java.util.List;
 
+import com.github.alex_moon.porcupi.manager.Manager;
 import com.github.alex_moon.porcupi.transport.Transport;
 
 public class ManagerThread extends Thread implements Manager {
