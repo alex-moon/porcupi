@@ -9,6 +9,7 @@ import com.github.alex_moon.porcupi.transport.Transport;
 public class ManagerThread extends Thread implements Manager {
     private ManagerServer server;
     private Socket socket;
+    private Transport transport;
     
     public Boolean poking = false;
 
@@ -19,13 +20,17 @@ public class ManagerThread extends Thread implements Manager {
     
     public void run() {
         try {
-            Transport transport = new Transport(socket, this);
+            transport = new Transport(socket, this);
             transport.start();
             transport.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         server.remove(this);
+    }
+    
+    public void tell(String outputLine) {
+        transport.tell(outputLine);
     }
     
     public List<String> manage(String inputLine) {

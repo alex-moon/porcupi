@@ -3,7 +3,6 @@ package com.github.alex_moon.porcupi.views;
 import spark.Request;
 import spark.Response;
 
-import com.github.alex_moon.porcupi.views.View;
 import com.github.alex_moon.porcupi.controllers.AccountController;
 import com.github.alex_moon.porcupi.models.Account;
 
@@ -12,10 +11,9 @@ public class AccountView extends View {
     private AccountController controller;
     
     public AccountView(AccountController controller) {
-        super("accounts");
-        this.controller = controller;
-        get("/account/:accountNumber/", "account:get", this::getAccount);
-        post("/account/", "account:post", this::postAccount);
+        super("accounts", controller);
+        get("/account/:accountNumber/", "get", this::getAccount);
+        post("/account/", "post", this::postAccount);
     }
     
     public String getAccount(Request request, Response response) {

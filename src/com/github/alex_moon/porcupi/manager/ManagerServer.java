@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.github.alex_moon.porcupi.Config;
-import com.github.alex_moon.porcupi.controllers.Controller;
 import com.github.alex_moon.porcupi.handlers.Handler;
 
 public class ManagerServer extends Thread {
@@ -36,6 +34,12 @@ public class ManagerServer extends Thread {
         } catch (IOException e) {
             System.out.println("Failed to open manager socket - no manager will be available for this session");
             e.printStackTrace();
+        }
+    }
+    
+    public void tell(String output) {
+        for (ManagerThread thread: threads) {
+            thread.tell(output);
         }
     }
     

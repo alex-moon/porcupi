@@ -6,7 +6,7 @@ import java.util.List;
 import com.github.alex_moon.porcupi.controllers.AccountController;
 import com.github.alex_moon.porcupi.controllers.Controller;
 import com.github.alex_moon.porcupi.manager.ManagerServer;
-import com.github.alex_moon.porcupi.manager.ManagerClient;
+import com.github.alex_moon.porcupi.manager.ManagerClient;;
 
 class Porcupi {
     private static List<Controller> modules = new ArrayList<Controller>();
