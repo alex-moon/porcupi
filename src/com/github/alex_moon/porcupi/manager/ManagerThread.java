@@ -1,9 +1,9 @@
 package com.github.alex_moon.porcupi.manager;
 
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
-import com.github.alex_moon.porcupi.manager.Manager;
 import com.github.alex_moon.porcupi.transport.Transport;
 
 public class ManagerThread extends Thread implements Manager {
@@ -29,6 +29,15 @@ public class ManagerThread extends Thread implements Manager {
     }
     
     public List<String> manage(String inputLine) {
-        return server.manage(this, inputLine, null);
+        String key = null;
+        List<String> tokens = new ArrayList<String>();
+        for (String token : inputLine.split(" ")) {
+            if (key == null) {
+                key = token;
+            } else {
+                tokens.add(token);
+            }
+        }
+        return server.manage(this, key, tokens);
     }
 }

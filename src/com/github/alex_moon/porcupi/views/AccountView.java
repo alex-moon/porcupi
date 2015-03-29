@@ -12,6 +12,7 @@ public class AccountView extends View {
     private AccountController controller;
     
     public AccountView(AccountController controller) {
+        super("accounts");
         this.controller = controller;
         get("/account/:accountNumber/", "account:get", this::getAccount);
         post("/account/", "account:post", this::postAccount);
@@ -26,7 +27,6 @@ public class AccountView extends View {
                 accountNumber
             ));
         }
-        if (controller.getExampleFlag()) { return success("Account is hidden (for example)"); }
         return success(account);
     }
     

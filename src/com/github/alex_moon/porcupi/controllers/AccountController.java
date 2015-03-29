@@ -7,16 +7,8 @@ import com.github.alex_moon.porcupi.services.AccountService;
 import com.github.alex_moon.porcupi.views.AccountView;
 
 public class AccountController extends Controller {
-    private Boolean exampleFlag = false;
-
     public AccountController() {
-        super();
-        new AccountView(this);
-        registerHandler(new ExampleHandler());
-    }
-
-    public Boolean getExampleFlag() {
-        return exampleFlag;
+        views.add(new AccountView(this));
     }
 
     public void getOrCreate(Account account) {
@@ -24,20 +16,6 @@ public class AccountController extends Controller {
             AccountService.create(Account.class, account);
         } else {
             AccountService.update(Account.class, account);
-        }
-    }
-
-    private class ExampleHandler implements Handler {
-        public String handle(String key, Object data) {
-            if (key.equals("example")) {
-                exampleFlag = !exampleFlag;
-                return "success: exampleFlag is now " + exampleFlag;
-            }
-            return null;
-        }
-        
-        public Boolean canHandle(String key) {
-            return key.equals("example");
         }
     }
 

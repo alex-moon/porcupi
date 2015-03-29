@@ -11,7 +11,6 @@ public class TransportThread extends Thread {
     BufferedReader in;
     Transport transport;
     String inputLine;
-    List<String> outputBuffer = new ArrayList<String>();
     
     public TransportThread (BufferedReader in, PrintWriter out, Transport transport) {
         this.out = out;
@@ -23,12 +22,7 @@ public class TransportThread extends Thread {
     public void run() {
         try {
             while ((inputLine = in.readLine()) != null) {
-                List<String> results = transport.manage(inputLine);
-                if (results != null) {
-                    for (String output : results) {
-                        out.println(output);
-                    }
-                }
+                tell(transport.manage(inputLine));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -37,5 +31,13 @@ public class TransportThread extends Thread {
     
     public void tell(String outputLine) {
         out.println(outputLine);
+    }
+    
+    public void tell(List<String> outputLines) {
+        if (outputLines != null) {
+            for (String outputLine : outputLines) {
+                out.println(outputLine);
+            }
+        }
     }
 }

@@ -15,8 +15,8 @@ class Porcupi {
         if (args.length > 0 && args[0].equals("shell")) {
             new ManagerClient();
         } else {
+            new ManagerServer();
             modules.add(new AccountController());
-            new ManagerServer(modules);
         }
     }
 }

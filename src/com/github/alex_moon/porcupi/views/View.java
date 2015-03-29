@@ -1,13 +1,32 @@
 package com.github.alex_moon.porcupi.views;
 
+import java.util.List;
+
 import spark.Route;
 import spark.Spark;
 
+import com.github.alex_moon.porcupi.handlers.PokeHandler;
+import com.github.alex_moon.porcupi.handlers.Pokeable;
+import com.github.alex_moon.porcupi.manager.ManagerServer;
 import com.github.alex_moon.porcupi.responses.Response;
 import com.google.gson.Gson;
 
-public class View {
+public class View implements Pokeable {
     protected static Gson gson = new Gson();
+    protected Boolean isBeingPoked = false;
+    protected String name = "bogus";
+    
+    public View(String name) {
+        this.name = name;
+        ManagerServer.get().registerHandler(new PokeHandler(this));
+    }
+    
+    public String poke(List<String> tokens) {
+        if (tokens.get(0).equals(name)) {
+            return "You poked " + name;
+        }
+        return "Didn't recognise " + tokens.get(0) + " - expected " + name;
+    }
 
     public void get(String route, String name, Route method) {
         Spark.get(route, (request, response) -> {

@@ -4,23 +4,28 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.github.alex_moon.porcupi.Config;
 import com.github.alex_moon.porcupi.controllers.Controller;
+import com.github.alex_moon.porcupi.handlers.Handler;
 
-public class ManagerServer {
+public class ManagerServer extends Thread {
     private static ManagerServer server;
     private List<ManagerThread> threads = new ArrayList<ManagerThread>();
-    private List<Controller> modules;
+    private List<Handler> handlers = new ArrayList<Handler>();
     private ServerSocket serverSocket;
     
     public static ManagerServer get() {
         return server;
     }
     
-    public ManagerServer(List<Controller> modules) {
+    public ManagerServer() {
         server = this;
-        this.modules = modules;
+        this.start();
+    }
+    
+    public void run() {
         try {
             serverSocket = new ServerSocket(Config.managerPort);
             while (true) {
@@ -38,12 +43,16 @@ public class ManagerServer {
         threads.remove(thread);
     }
     
-    public List<String> manage(Thread thread, String key, Object data) {
+    public void registerHandler(Handler handler) {
+        handlers.add(handler);
+    }
+    
+    public List<String> manage(Thread thread, String key, List<String> tokens) {
         System.out.println("received from client: " + key);
         List<String> results = new ArrayList<String>();
-        for (Controller module : modules) {
-            for (String result : module.handle(key, data)) {
-                results.add(result);
+        for (Handler handler : handlers) {
+            if (handler.canHandle(key)) {
+                results.add(handler.handle(key, tokens));
             }
         }
         return results;

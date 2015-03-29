@@ -39,6 +39,10 @@ public class Transport extends Thread {
             e.printStackTrace();
         }
     }
+
+    public List<String> manage(String inputLine) {
+        return manager.manage(inputLine);
+    }
     
     public void tell(String inputLine) {
         if (thread != null) {
@@ -46,14 +50,9 @@ public class Transport extends Thread {
         }
     }
 
-    public List<String> manage(String inputLine) {
-        return manager.manage(inputLine);
-    }
-
-    public List<String> tell(List<String> inputLines) {
-        for (String inputLine : inputLines) {
-            tell(inputLine);
+    public void tell(List<String> inputLines) {
+        if (thread != null) {
+            thread.tell(inputLines);
         }
-        return null;
     }
 }
