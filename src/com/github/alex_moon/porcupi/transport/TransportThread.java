@@ -23,7 +23,12 @@ public class TransportThread extends Thread {
     public void run() {
         try {
             while ((inputLine = in.readLine()) != null) {
-                transport.manage(inputLine);
+                List<String> results = transport.manage(inputLine);
+                if (results != null) {
+                    for (String output : results) {
+                        out.println(output);
+                    }
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

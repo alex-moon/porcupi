@@ -46,8 +46,8 @@ public class Transport extends Thread {
         }
     }
 
-    public void manage(String inputLine) {
-        manager.manage(inputLine);
+    public List<String> manage(String inputLine) {
+        return manager.manage(inputLine);
     }
 
     public List<String> tell(List<String> inputLines) {
