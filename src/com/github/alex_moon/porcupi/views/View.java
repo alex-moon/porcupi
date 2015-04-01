@@ -47,13 +47,14 @@ public class View implements Pokeable {
         for (String routeFullName : poking) {
             if (routeToPoke.equals(routeFullName)) {
                 ManagerServer.get().tell("now at " + routeToPoke + " - what would you like to do?");
-                synchronized (pokeMonitor) {
+                /* synchronized (pokeMonitor) {
                     try {
+                        // @todo pass pokeMonitor to a "contextHandler" of some kind... 
                         pokeMonitor.wait();
                     } catch (InterruptedException e) {
                         return;
                     }
-                }
+                } */
                 ManagerServer.get().tell(track.toString());
             }
         }
