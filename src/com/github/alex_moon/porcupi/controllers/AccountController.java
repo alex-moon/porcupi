@@ -11,7 +11,7 @@ public class AccountController extends Controller {
         views.add(new AccountView(this));
     }
 
-    public void getOrCreate(Account account) {
+    public void createOrUpdate(Account account) {
         if (account.getId() == null) {
             AccountService.create(Account.class, account);
         } else {

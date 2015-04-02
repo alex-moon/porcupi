@@ -7,11 +7,13 @@ import java.util.List;
 
 import com.github.alex_moon.porcupi.Config;
 import com.github.alex_moon.porcupi.handlers.Handler;
+import com.github.alex_moon.porcupi.manager.context.Context;
 
 public class ManagerServer extends Thread {
     private static ManagerServer server;
     private List<ManagerThread> threads = new ArrayList<ManagerThread>();
     private List<Handler> handlers = new ArrayList<Handler>();
+    private List<Context> contexts = new ArrayList<Context>();
     private ServerSocket serverSocket;
     
     public static ManagerServer get() {
@@ -54,6 +56,16 @@ public class ManagerServer extends Thread {
     public List<String> manage(Thread thread, String key, List<String> tokens) {
         System.out.println("received from client: " + key);
         List<String> results = new ArrayList<String>();
+
+        // first try context-specific handle for thread
+        for (Context context : contexts) {
+            if (context.canHandle(thread.getId(), key)) {
+                results.add(context.handle(key, tokens));
+                return results;
+            }
+        }
+        
+        // finally try non-context specific handle for all threads
         for (Handler handler : handlers) {
             if (handler.canHandle(key)) {
                 results.add(handler.handle(key, tokens));

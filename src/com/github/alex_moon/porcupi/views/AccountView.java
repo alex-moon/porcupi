@@ -30,7 +30,7 @@ public class AccountView extends View {
     
     public String postAccount(Request request, Response response) {
         account = gson.fromJson(request.body(), Account.class);
-        controller.getOrCreate(account);
+        controller.createOrUpdate(account);
         return success(account);
     }
 }
