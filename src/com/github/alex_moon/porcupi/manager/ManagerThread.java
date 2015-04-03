@@ -13,8 +13,8 @@ public class ManagerThread extends Thread implements Manager {
     
     public Boolean poking = false;
 
-    public ManagerThread(ManagerServer manager, Socket socket) {
-        this.server = manager;
+    public ManagerThread(ManagerServer server, Socket socket) {
+        this.server = server;
         this.socket = socket;
     }
     

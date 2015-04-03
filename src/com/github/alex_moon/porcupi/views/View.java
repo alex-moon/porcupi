@@ -18,7 +18,6 @@ import com.google.gson.Gson;
 public class View implements Pokeable {
     protected static Gson gson = new Gson();
     protected Controller controller;
-    protected Object pokeMonitor = new Object();
     protected PokeHandler pokeHandler;
     protected List<String> poking = new ArrayList<String>();
     protected Map<String, Route> routes = new HashMap<String, Route>();
@@ -37,7 +36,7 @@ public class View implements Pokeable {
             System.out.println("trying to poke " + routeFullName + " with " + routeToPoke);
             if (routeToPoke.equals(routeFullName)) {
                 poking.add(routeFullName);
-                return "now poking " + routeFullName;
+                return routeFullName;
             }
         }
         return null;
@@ -47,22 +46,8 @@ public class View implements Pokeable {
         for (String routeFullName : poking) {
             if (routeToPoke.equals(routeFullName)) {
                 ManagerServer.get().tell("now at " + routeToPoke + " - what would you like to do?");
-                synchronized (pokeMonitor) {
-                    try {
-                        // @todo pass pokeMonitor to a "contextHandler" of some kind... 
-                        pokeMonitor.wait();
-                    } catch (InterruptedException e) {
-                        return;
-                    }
-                }
                 ManagerServer.get().tell(track.toString());
             }
-        }
-    }
-    
-    public void pokeContinue() {
-        synchronized (pokeMonitor) {
-            pokeMonitor.notify();
         }
     }
 

@@ -1,4 +1,4 @@
-package com.github.alex_moon.porcupi.manager.context;
+package com.github.alex_moon.porcupi.handlers;
 
 public class ContextException extends Exception {
     public ContextException(String message) {
