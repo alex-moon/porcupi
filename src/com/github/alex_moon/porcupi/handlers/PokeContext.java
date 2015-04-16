@@ -1,20 +1,23 @@
 package com.github.alex_moon.porcupi.handlers;
 
-import java.util.List;
 
 public class PokeContext extends Context {
-    private String routeName;
+    private String key;
+    private Pokeable pokeable;
 
-    public PokeContext(long threadId, PokeHandler handler, String routeName) {
+    public PokeContext(long threadId, PokeHandler handler, Pokeable pokeable, String key) {
         super(threadId, handler);
-        this.routeName = routeName;
+        this.key = key;
+        this.pokeable = pokeable;
     }
     
-    public String getRouteName() {
-        return routeName;
+    public String getKey() {
+        return key;
     }
-
-    public String handle(String key, List<String> tokens) {
-        return null;
+    
+    public void handleMessage(String message) {
+        if (message == "track") {
+            ((PokeHandler) handler).tell(threadId, pokeable.getTrack());
+        }
     }
 }

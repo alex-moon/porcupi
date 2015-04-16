@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 
 public class View implements Pokeable {
     protected static Gson gson = new Gson();
+    protected Object track;
     protected Controller controller;
     protected PokeHandler pokeHandler;
     protected List<String> poking = new ArrayList<String>();
@@ -42,21 +43,27 @@ public class View implements Pokeable {
         return null;
     }
     
-    private void pokeHandle(String routeToPoke, Object track) {
+    private void pokeHandle(String routeToPoke) {
         for (String routeFullName : poking) {
             if (routeToPoke.equals(routeFullName)) {
                 ManagerServer.get().tell("now at " + routeToPoke + " - what would you like to do?");
-                ManagerServer.get().tell(track.toString());
+                pokeHandler.activateContext(routeFullName);
             }
         }
+    }
+    
+    public Object getTrack() {
+        return track;
     }
 
     public void get(String urlPattern, String routeName, Route route) {
         String routeFullName = name + ":" + routeName;
         Spark.get(urlPattern, (request, response) -> {
-            pokeHandle(routeFullName, request);
+            track = request;
+            pokeHandle(routeFullName);
             Object result = route.handle(request, response);
-            pokeHandle(routeFullName, result);
+            track = result;
+            pokeHandle(routeFullName);
             return result;
         });
         routes.put(routeFullName, route);
@@ -65,9 +72,11 @@ public class View implements Pokeable {
     public void post(String urlPattern, String routeName, Route route) {
         String routeFullName = name + ":" + routeName;
         Spark.post(urlPattern, (request, response) -> {
-            pokeHandle(routeFullName, request);
+            track = request;
+            pokeHandle(routeFullName);
             Object result = route.handle(request, response);
-            pokeHandle(routeFullName, result);
+            track = result;
+            pokeHandle(routeFullName);
             return result;
         });
         routes.put(routeFullName, route);

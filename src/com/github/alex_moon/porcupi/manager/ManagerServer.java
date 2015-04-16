@@ -43,6 +43,14 @@ public class ManagerServer extends Thread {
             thread.tell(output);
         }
     }
+
+    public void tell(long threadId, String output) {
+        for (ManagerThread thread: threads) {
+            if (thread.getId() == threadId) {
+                thread.tell(output);
+            }
+        }
+    }
     
     public void remove(ManagerThread thread) {
         threads.remove(thread);
@@ -57,7 +65,8 @@ public class ManagerServer extends Thread {
         List<String> results = new ArrayList<String>();
         long threadId = thread.getId();
         for (Handler handler : handlers) {
-            if (handler.canHandle(key)) {
+            // somewhere in here we have to handle context-specific commands, you see?
+            if (handler.canHandle(threadId, key)) {
                 results.add(handler.handle(threadId, key, tokens));
             }
         }
