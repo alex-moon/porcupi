@@ -1,7 +1,7 @@
 package com.github.alex_moon.porcupi.manager;
 
-import java.util.List;
+import org.json.JSONObject;
 
 public interface Manager {
-    public List<String> manage(String inputLine);
+    public void tellIn(JSONObject input);
 }

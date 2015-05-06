@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.List;
+
+import org.json.JSONObject;
 
 import com.github.alex_moon.porcupi.manager.Manager;
-import com.google.gson.Gson;
 
 public class Transport extends Thread {
     private Socket socket;
@@ -40,19 +40,13 @@ public class Transport extends Thread {
         }
     }
 
-    public List<String> manage(String inputLine) {
-        return manager.manage(inputLine);
+    public void tellIn(JSONObject input) {
+        manager.tellIn(input);
     }
     
-    public void tell(String inputLine) {
+    public void tellOut(JSONObject output) {
         if (thread != null) {
-            thread.tell(inputLine);
-        }
-    }
-
-    public void tell(List<String> inputLines) {
-        if (thread != null) {
-            thread.tell(inputLines);
+            thread.tellOut(output);
         }
     }
 }

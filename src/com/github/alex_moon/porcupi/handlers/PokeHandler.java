@@ -3,6 +3,8 @@ package com.github.alex_moon.porcupi.handlers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import com.github.alex_moon.porcupi.manager.ManagerServer;
 
 public class PokeHandler implements Handler {
@@ -13,16 +15,14 @@ public class PokeHandler implements Handler {
         this.pokeable = pokeable;
     }
     
-    public String handle(long threadId, String key, List<String> tokens) {
-        if (key.equals("poke")) {
-            if (tokens.size() > 0) {
-                String pokeKey = pokeable.poke(tokens);
-                contexts.add(new PokeContext(threadId, this, pokeable, pokeKey));
-                return "now poking " + pokeKey;
-            }
-            return "Not enough arguments to poke";
+    public void tellIn(JSONObject input) {
+        long threadId = (long) input.get("threadId");
+        String action = (String) input.get("action");
+        if (action.equals("poke")) {
+            String pokeKey = pokeable.poke((List<String>) input.get("tokens"));
+            contexts.add(new PokeContext(threadId, this, pokeable, pokeKey));
+            tellOut(new JSONObject("{\"poke\": \"" + pokeKey + "\"}"));
         }
-        return "Didn't recognise key " + key;
     }
     
     public void activateContext(String pokeKey) {
@@ -37,8 +37,8 @@ public class PokeHandler implements Handler {
         return key.equals("poke");
     }
     
-    public void tell(long threadId, Object message) {
-        ManagerServer.get().tell(threadId, message.toString());
+    public void tellOut(JSONObject output) {
+        ManagerServer.get().tellOut(output);
     }
     
     public void notify(long threadId, Object message) {

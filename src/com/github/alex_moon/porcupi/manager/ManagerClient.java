@@ -24,7 +24,7 @@ public class ManagerClient implements Manager {
             transport = new Transport(socket, this);
             transport.start();
             while ((inputLine = stdIn.readLine()) != null) {
-                transport.tell(inputLine);
+                transport.tellOut(inputLine);
             }
             socket.close();
         } catch (UnknownHostException e1) {
@@ -36,7 +36,7 @@ public class ManagerClient implements Manager {
         }
     }
     
-    public List<String> manage(String inputLine) {
+    public List<String> tellIn(JSONObject inputLine) {
         System.out.println("received from server: " + inputLine);
         return null;
     }

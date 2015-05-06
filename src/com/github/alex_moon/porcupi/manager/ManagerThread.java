@@ -4,6 +4,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import com.github.alex_moon.porcupi.transport.Transport;
 
 public class ManagerThread extends Thread implements Manager {
@@ -29,20 +31,11 @@ public class ManagerThread extends Thread implements Manager {
         server.remove(this);
     }
     
-    public void tell(String outputLine) {
-        transport.tell(outputLine);
+    public void tellOut(JSONObject output) {
+        transport.tellOut(output);
     }
     
-    public List<String> manage(String inputLine) {
-        String key = null;
-        List<String> tokens = new ArrayList<String>();
-        for (String token : inputLine.split(" ")) {
-            if (key == null) {
-                key = token;
-            } else {
-                tokens.add(token);
-            }
-        }
-        return server.manage(this, key, tokens);
+    public void tellIn(JSONObject input) {
+        server.tellIn(input);
     }
 }

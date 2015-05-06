@@ -5,8 +5,9 @@ import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import com.github.alex_moon.porcupi.Config;
-import com.github.alex_moon.porcupi.handlers.Context;
 import com.github.alex_moon.porcupi.handlers.Handler;
 
 public class ManagerServer extends Thread {
@@ -38,16 +39,10 @@ public class ManagerServer extends Thread {
         }
     }
     
-    public void tell(String output) {
+    public void tellOut(JSONObject output) {
         for (ManagerThread thread: threads) {
-            thread.tell(output);
-        }
-    }
-
-    public void tell(long threadId, String output) {
-        for (ManagerThread thread: threads) {
-            if (thread.getId() == threadId) {
-                thread.tell(output);
+            if (!output.has("threadId") || thread.getId() == (long) output.get("threadId")) {
+                thread.tellOut(output);
             }
         }
     }
@@ -60,16 +55,12 @@ public class ManagerServer extends Thread {
         handlers.add(handler);
     }
 
-    public List<String> manage(Thread thread, String key, List<String> tokens) {
-        System.out.println("received from client: " + key);
-        List<String> results = new ArrayList<String>();
-        long threadId = thread.getId();
+    public void tellIn(JSONObject input) {
+        // Thread thread, String key, List<String> tokens) {
+        System.out.println("received from client: " + input.toString());
         for (Handler handler : handlers) {
             // somewhere in here we have to handle context-specific commands, you see?
-            if (handler.canHandle(threadId, key)) {
-                results.add(handler.handle(threadId, key, tokens));
-            }
+            handler.tellIn(input);
         }
-        return results;
     }
 }

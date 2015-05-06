@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONObject;
+
 import spark.Route;
 import spark.Spark;
 
@@ -46,7 +48,7 @@ public class View implements Pokeable {
     private void pokeHandle(String routeToPoke) {
         for (String routeFullName : poking) {
             if (routeToPoke.equals(routeFullName)) {
-                ManagerServer.get().tell("now at " + routeToPoke + " - what would you like to do?");
+                ManagerServer.get().tellOut(new JSONObject("{\"poke\": \"" + routeToPoke + "\"}"));
                 pokeHandler.activateContext(routeFullName);
             }
         }

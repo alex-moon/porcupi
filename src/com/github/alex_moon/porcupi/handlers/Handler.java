@@ -1,8 +1,7 @@
 package com.github.alex_moon.porcupi.handlers;
 
-import java.util.List;
+import org.json.JSONObject;
 
 public interface Handler {
-    public String handle(long threadId, String key, List<String> tokens);
-    public Boolean canHandle(long threadId, String key);
+    public void tellIn(JSONObject input);
 }
