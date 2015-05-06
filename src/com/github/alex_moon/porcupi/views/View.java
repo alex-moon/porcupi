@@ -34,6 +34,10 @@ public class View implements Pokeable {
     }
     
     public String poke(String message) {
+        if (message == null) {
+            return "please specify a route to poke";
+        }
+
         String routeToPoke = message.split(" ")[0];
         for (String routeFullName: routes.keySet()) {
             System.out.println("trying to poke " + routeFullName + " with " + routeToPoke);
@@ -48,12 +52,15 @@ public class View implements Pokeable {
     private void pokeHandle(String routeToPoke) {
         for (String routeFullName : poking) {
             if (routeToPoke.equals(routeFullName)) {
-                ManagerServer.get().tellOut(new JSONObject("{\"poke\": \"" + routeToPoke + "\"}"));
+                ManagerServer.get().tellOut(
+                    new JSONObject()
+                    .put("lol", routeToPoke)
+                );
                 pokeHandler.activateContext(routeFullName);
             }
         }
     }
-    
+
     public Object getTrack() {
         return track;
     }

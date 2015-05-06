@@ -36,6 +36,9 @@ public class ManagerThread extends Thread implements Manager {
     }
     
     public void tellIn(JSONObject input) {
+        if (!input.has("threadId")) {
+            input.put("threadId", getId());
+        }
         server.tellIn(input);
     }
 }

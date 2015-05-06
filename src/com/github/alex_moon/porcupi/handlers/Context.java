@@ -54,6 +54,10 @@ public abstract class Context {
         if (message == "continue") {
             continuing = true;
         }
-        // handler.tellOut?
+        handler.tellOut(
+            new JSONObject()
+            .put("message", "what are you doing lol")
+            .put("action", "poke")
+        );
     }
 }
