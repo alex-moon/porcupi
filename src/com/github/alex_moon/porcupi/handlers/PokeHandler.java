@@ -21,7 +21,7 @@ public class PokeHandler implements Handler {
         // @todo this next if statement is a
         // NullPointerException waiting to happen...
         if (input.get("action").equals("poke")) {
-            String pokeKey = pokeable.poke((List<String>) input.get("message"));
+            String pokeKey = pokeable.poke(input.getString("message"));
             contexts.add(new PokeContext(threadId, this, pokeable, pokeKey));
             tellOut(new JSONObject("{\"poke\": \"" + pokeKey + "\"}"));
         }

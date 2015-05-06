@@ -1,5 +1,7 @@
 package com.github.alex_moon.porcupi.handlers;
 
+import org.json.JSONObject;
+
 
 public class PokeContext extends Context {
     private String key;
@@ -17,7 +19,11 @@ public class PokeContext extends Context {
     
     public void handleMessage(String message) {
         if (message == "track") {
-            ((PokeHandler) handler).tellOut(threadId, pokeable.getTrack());
+            ((PokeHandler) handler).tellOut(
+                new JSONObject()
+                .put("threadId", threadId)
+                .put("track", pokeable.getTrack())
+            );
         }
     }
 }
