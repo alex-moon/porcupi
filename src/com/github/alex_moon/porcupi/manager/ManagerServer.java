@@ -39,14 +39,6 @@ public class ManagerServer extends Thread {
         }
     }
     
-    public void tellOut(JSONObject output) {
-        for (ManagerThread thread: threads) {
-            if (!output.has("threadId") || thread.getId() == (long) output.get("threadId")) {
-                thread.tellOut(output);
-            }
-        }
-    }
-    
     public void remove(ManagerThread thread) {
         threads.remove(thread);
     }
@@ -56,11 +48,17 @@ public class ManagerServer extends Thread {
     }
 
     public void tellIn(JSONObject input) {
-        // Thread thread, String key, List<String> tokens) {
         System.out.println("received from client: " + input.toString());
         for (Handler handler : handlers) {
-            // somewhere in here we have to handle context-specific commands, you see?
             handler.tellIn(input);
+        }
+    }
+    
+    public void tellOut(JSONObject output) {
+        for (ManagerThread thread: threads) {
+            if (!output.has("threadId") || thread.getId() == (long) output.get("threadId")) {
+                thread.tellOut(output);
+            }
         }
     }
 }

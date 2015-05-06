@@ -33,8 +33,8 @@ public class View implements Pokeable {
         ManagerServer.get().registerHandler(pokeHandler);
     }
     
-    public String poke(List<String> tokens) {
-        String routeToPoke = tokens.get(0);
+    public String poke(String message) {
+        String routeToPoke = message.split(" ")[0];
         for (String routeFullName: routes.keySet()) {
             System.out.println("trying to poke " + routeFullName + " with " + routeToPoke);
             if (routeToPoke.equals(routeFullName)) {

@@ -17,12 +17,15 @@ public class PokeHandler implements Handler {
     
     public void tellIn(JSONObject input) {
         long threadId = (long) input.get("threadId");
-        String action = (String) input.get("action");
-        if (action.equals("poke")) {
-            String pokeKey = pokeable.poke((List<String>) input.get("tokens"));
+
+        // @todo this next if statement is a
+        // NullPointerException waiting to happen...
+        if (input.get("action").equals("poke")) {
+            String pokeKey = pokeable.poke((List<String>) input.get("message"));
             contexts.add(new PokeContext(threadId, this, pokeable, pokeKey));
             tellOut(new JSONObject("{\"poke\": \"" + pokeKey + "\"}"));
         }
+        // @todo context specific actions!!!
     }
     
     public void activateContext(String pokeKey) {
@@ -42,6 +45,8 @@ public class PokeHandler implements Handler {
     }
     
     public void notify(long threadId, Object message) {
-        // here's where we would notify all our contexts, you see?
+        // @todo I'm not convinced we need this method - tellIn
+        // should be able to handle it - we'd need a key for
+        // "context" and I'm pretty sure that's all...
     }
 }

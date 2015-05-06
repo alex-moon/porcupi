@@ -1,7 +1,11 @@
 package com.github.alex_moon.porcupi.handlers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.json.JSONObject;
 
 public abstract class Context {
     protected long threadId;
@@ -33,10 +37,18 @@ public abstract class Context {
         }
     }
     
-    public void notify(String message) {
+    public void notify(JSONObject messageObj) {
         // this is presently never called - we have to read from incoming socket and handle
         // in a context-specific manner
-        messages.add(message);
+        if (messageObj.has("messages")) {
+            for (String message : (List<String>) messageObj.get("messages")) {
+                messages.add(message);
+            }
+        }
+        
+        if (messageObj.has("message")) {
+            messages.add((String) messageObj.get("message"));
+        }
         notify();
     }
     
@@ -44,5 +56,6 @@ public abstract class Context {
         if (message == "continue") {
             continuing = true;
         }
+        // handler.tellOut?
     }
 }

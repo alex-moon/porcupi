@@ -1,7 +1,5 @@
 package com.github.alex_moon.porcupi.handlers;
 
-import org.json.JSONObject;
+import com.github.alex_moon.porcupi.Teller;
 
-public interface Handler {
-    public void tellIn(JSONObject input);
-}
+public interface Handler extends Teller {}
