@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import org.json.JSONObject;
+import com.github.alex_moon.porcupi.messages.Message;
 
 public class TransportThread extends Thread {
     PrintWriter out;
@@ -22,14 +22,14 @@ public class TransportThread extends Thread {
     public void run() {
         try {
             while ((inputLine = in.readLine()) != null) {
-                transport.tellIn(new JSONObject(inputLine));
+                transport.tellIn(new Message(inputLine));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void tellOut(JSONObject output) {
+    public void tellOut(Message output) {
         out.println(output.toString());
     }
 }

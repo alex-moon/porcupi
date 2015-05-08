@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import org.json.JSONObject;
+import com.github.alex_moon.porcupi.messages.Message;
 
 import com.github.alex_moon.porcupi.manager.Manager;
 
@@ -40,11 +40,11 @@ public class Transport extends Thread {
         }
     }
 
-    public void tellIn(JSONObject input) {
+    public void tellIn(Message input) {
         manager.tellIn(input);
     }
     
-    public void tellOut(JSONObject output) {
+    public void tellOut(Message output) {
         if (thread != null) {
             thread.tellOut(output);
         }

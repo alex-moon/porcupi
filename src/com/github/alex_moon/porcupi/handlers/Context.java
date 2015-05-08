@@ -3,7 +3,7 @@ package com.github.alex_moon.porcupi.handlers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONObject;
+import com.github.alex_moon.porcupi.messages.Message;
 
 public abstract class Context {
     protected long threadId;
@@ -35,7 +35,7 @@ public abstract class Context {
         }
     }
     
-    public void notify(JSONObject messageObj) {
+    public void notify(Message messageObj) {
         // this is presently never called - we have to read from incoming socket and handle
         // in a context-specific manner
         if (messageObj.has("messages")) {
@@ -55,7 +55,7 @@ public abstract class Context {
             continuing = true;
         }
         handler.tellOut(
-            new JSONObject()
+            new Message()
             .put("message", "what are you doing lol")
             .put("action", "poke")
         );

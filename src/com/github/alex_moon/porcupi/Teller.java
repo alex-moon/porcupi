@@ -1,8 +1,8 @@
 package com.github.alex_moon.porcupi;
 
-import org.json.JSONObject;
+import com.github.alex_moon.porcupi.messages.Message;
 
 public interface Teller {
-    public void tellIn(JSONObject input);
-    public void tellOut(JSONObject output);
+    public void tellIn(Message input);
+    public void tellOut(Message output);
 }

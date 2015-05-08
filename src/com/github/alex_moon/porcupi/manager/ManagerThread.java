@@ -4,7 +4,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONObject;
+import com.github.alex_moon.porcupi.messages.Message;
 
 import com.github.alex_moon.porcupi.transport.Transport;
 
@@ -31,11 +31,11 @@ public class ManagerThread extends Thread implements Manager {
         server.remove(this);
     }
     
-    public void tellOut(JSONObject output) {
+    public void tellOut(Message output) {
         transport.tellOut(output);
     }
     
-    public void tellIn(JSONObject input) {
+    public void tellIn(Message input) {
         if (!input.has("threadId")) {
             input.put("threadId", getId());
         }

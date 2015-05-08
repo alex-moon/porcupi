@@ -3,7 +3,7 @@ package com.github.alex_moon.porcupi.handlers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONObject;
+import com.github.alex_moon.porcupi.messages.Message;
 
 import com.github.alex_moon.porcupi.manager.ManagerServer;
 
@@ -15,7 +15,7 @@ public class PokeHandler implements Handler {
         this.pokeable = pokeable;
     }
     
-    public void tellIn(JSONObject input) {
+    public void tellIn(Message input) {
         long threadId = (long) input.get("threadId");
 
         // @todo this next if statement is a
@@ -23,7 +23,7 @@ public class PokeHandler implements Handler {
         if (input.get("action").equals("poke")) {
             String pokeKey = pokeable.poke(input.optString("message", null));
             contexts.add(new PokeContext(threadId, this, pokeable, pokeKey));
-            tellOut(new JSONObject("{\"poke\": \"" + pokeKey + "\"}"));
+            tellOut(new Message("{\"poke\": \"" + pokeKey + "\"}"));
         }
         // @todo context specific actions!!!
     }
@@ -36,7 +36,7 @@ public class PokeHandler implements Handler {
         }
     }
     
-    public void tellOut(JSONObject output) {
+    public void tellOut(Message output) {
         ManagerServer.get().tellOut(output);
     }
     

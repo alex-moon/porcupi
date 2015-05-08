@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import org.json.JSONObject;
+import com.github.alex_moon.porcupi.messages.Message;
 
 import com.github.alex_moon.porcupi.Config;
 import com.github.alex_moon.porcupi.transport.Transport;
@@ -23,7 +23,7 @@ public class ManagerClient implements Manager {
             transport = new Transport(socket, this);
             transport.start();
             while ((inputLine = stdIn.readLine()) != null) {
-                transport.tellOut(new JSONObject(inputLine));
+                transport.tellOut(new Message(inputLine));
             }
             socket.close();
         } catch (UnknownHostException e1) {
@@ -35,11 +35,11 @@ public class ManagerClient implements Manager {
         }
     }
     
-    public void tellIn(JSONObject input) {
+    public void tellIn(Message input) {
         System.out.println("received from server: " + input.toString());
     }
     
-    public void tellOut(JSONObject output) {
+    public void tellOut(Message output) {
         // if we're at the end of the chain, this method won't have meaning
         // @todo make Teller abstract and implement a stub?
         System.out.println("HOW DID THIS HAPPEN?: " + output.toString());

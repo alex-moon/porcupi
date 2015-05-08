@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONObject;
+import com.github.alex_moon.porcupi.messages.Message;
 
 import com.github.alex_moon.porcupi.Config;
 import com.github.alex_moon.porcupi.handlers.Handler;
@@ -47,14 +47,14 @@ public class ManagerServer extends Thread {
         handlers.add(handler);
     }
 
-    public void tellIn(JSONObject input) {
+    public void tellIn(Message input) {
         System.out.println("received from client: " + input.toString());
         for (Handler handler : handlers) {
             handler.tellIn(input);
         }
     }
     
-    public void tellOut(JSONObject output) {
+    public void tellOut(Message output) {
         for (ManagerThread thread: threads) {
             if (!output.has("threadId") || thread.getId() == (long) output.get("threadId")) {
                 thread.tellOut(output);

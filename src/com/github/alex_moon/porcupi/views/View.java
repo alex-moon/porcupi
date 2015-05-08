@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONObject;
+import com.github.alex_moon.porcupi.messages.Message;
 
 import spark.Route;
 import spark.Spark;
@@ -53,7 +53,7 @@ public class View implements Pokeable {
         for (String routeFullName : poking) {
             if (routeToPoke.equals(routeFullName)) {
                 ManagerServer.get().tellOut(
-                    new JSONObject()
+                    new Message()
                     .put("lol", routeToPoke)
                 );
                 pokeHandler.activateContext(routeFullName);
