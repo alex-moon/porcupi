@@ -20,9 +20,9 @@ public class PokeContext extends Context {
     public void handleMessage(String message) {
         if (message == "track") {
             ((PokeHandler) handler).tellOut(
-                new Message()
-                .put("threadId", threadId)
-                .put("track", pokeable.getTrack())
+                new Message(message)
+                .setManagerThreadId(threadId)
+                .setTrack(pokeable.getTrack())
             );
         }
     }
