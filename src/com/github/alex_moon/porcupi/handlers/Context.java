@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.alex_moon.porcupi.messages.Message;
+import com.github.alex_moon.porcupi.messages.PokeMessage;
 
 public abstract class Context {
     protected long threadId;
@@ -38,15 +39,7 @@ public abstract class Context {
     public void notify(Message messageObj) {
         // this is presently never called - we have to read from incoming socket and handle
         // in a context-specific manner
-        if (messageObj.has("messages")) {
-            for (String message : (List<String>) messageObj.get("messages")) {
-                messages.add(message);
-            }
-        }
-        
-        if (messageObj.has("message")) {
-            messages.add((String) messageObj.get("message"));
-        }
+        messages.add(messageObj.getMessage());
         notify();
     }
     
@@ -55,9 +48,7 @@ public abstract class Context {
             continuing = true;
         }
         handler.tellOut(
-            new Message()
-            .put("message", "what are you doing lol")
-            .put("action", "poke")
+            new PokeMessage("what are you doing lol")
         );
     }
 }

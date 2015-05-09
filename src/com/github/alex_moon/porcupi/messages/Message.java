@@ -13,9 +13,17 @@ public class Message {
     public Message(String message) {
         this.message = message;
     }
-    
     public Boolean isValid() {
         return action != null;
+    }
+    public String toString() {
+        return String.format(
+            "action=%s thread=%s context=%s message=%s",
+            action,
+            managerThreadId,
+            context,
+            message
+        );
     }
 
     public String getAction() {
@@ -45,5 +53,11 @@ public class Message {
     }
     public Map<String, Object> getTrack() {
         return track;
+    }
+    public String getMessage() {
+        return message;
+    }
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

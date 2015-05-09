@@ -23,7 +23,8 @@ public class ManagerClient implements Manager {
             transport = new Transport(socket, this);
             transport.start();
             while ((inputLine = stdIn.readLine()) != null) {
-                transport.tellOut(new Message(inputLine));
+                String action = inputLine.split(" ")[0];
+                transport.tellOut(new Message(inputLine).setAction(action));
             }
             socket.close();
         } catch (UnknownHostException e1) {

@@ -22,7 +22,8 @@ public class TransportThread extends Thread {
     public void run() {
         try {
             while ((inputLine = in.readLine()) != null) {
-                transport.tellIn(new Message(inputLine));
+                String action = inputLine.split(" ")[0];
+                transport.tellIn(new Message(inputLine).setAction(action));
             }
         } catch (IOException e) {
             e.printStackTrace();

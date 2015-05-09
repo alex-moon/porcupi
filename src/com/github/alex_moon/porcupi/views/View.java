@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.github.alex_moon.porcupi.messages.Message;
-
 import spark.Route;
 import spark.Spark;
 
@@ -14,12 +12,13 @@ import com.github.alex_moon.porcupi.controllers.Controller;
 import com.github.alex_moon.porcupi.handlers.PokeHandler;
 import com.github.alex_moon.porcupi.handlers.Pokeable;
 import com.github.alex_moon.porcupi.manager.ManagerServer;
+import com.github.alex_moon.porcupi.messages.Message;
 import com.github.alex_moon.porcupi.responses.Response;
 import com.google.gson.Gson;
 
 public class View implements Pokeable {
     protected static Gson gson = new Gson();
-    protected Object track;
+    protected Map<String, Object> track = new HashMap<String, Object>();
     protected Controller controller;
     protected PokeHandler pokeHandler;
     protected List<String> poking = new ArrayList<String>();
@@ -53,25 +52,24 @@ public class View implements Pokeable {
         for (String routeFullName : poking) {
             if (routeToPoke.equals(routeFullName)) {
                 ManagerServer.get().tellOut(
-                    new Message()
-                    .put("lol", routeToPoke)
+                    new Message("routeToPoke")
                 );
                 pokeHandler.activateContext(routeFullName);
             }
         }
     }
 
-    public Object getTrack() {
+    public Map<String, Object> getTrack() {
         return track;
     }
 
     public void get(String urlPattern, String routeName, Route route) {
         String routeFullName = name + ":" + routeName;
         Spark.get(urlPattern, (request, response) -> {
-            track = request;
+            track.put("request", request);
             pokeHandle(routeFullName);
             Object result = route.handle(request, response);
-            track = result;
+            track.put("result", result);
             pokeHandle(routeFullName);
             return result;
         });
@@ -81,10 +79,10 @@ public class View implements Pokeable {
     public void post(String urlPattern, String routeName, Route route) {
         String routeFullName = name + ":" + routeName;
         Spark.post(urlPattern, (request, response) -> {
-            track = request;
+            track.put("request", request);
             pokeHandle(routeFullName);
             Object result = route.handle(request, response);
-            track = result;
+            track.put("result", result);
             pokeHandle(routeFullName);
             return result;
         });

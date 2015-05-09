@@ -16,14 +16,14 @@ public class PokeHandler implements Handler {
     }
     
     public void tellIn(Message input) {
-        long threadId = (long) input.get("threadId");
+        long threadId = input.getManagerThreadId();
 
         // @todo this next if statement is a
         // NullPointerException waiting to happen...
-        if (input.get("action").equals("poke")) {
-            String pokeKey = pokeable.poke(input.optString("message", null));
+        if (input.getAction().equals("poke")) {
+            String pokeKey = pokeable.poke(input.getMessage());
             contexts.add(new PokeContext(threadId, this, pokeable, pokeKey));
-            tellOut(new Message("{\"poke\": \"" + pokeKey + "\"}"));
+            tellOut(new Message(pokeKey));
         }
         // @todo context specific actions!!!
     }
