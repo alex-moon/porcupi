@@ -19,17 +19,25 @@ public class ManagerClient implements Manager {
         Socket socket;
         Transport transport;
         try {
+            String action, tokens;
             socket = new Socket("127.0.0.1", Config.managerPort);
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
             transport = new Transport(socket, this);
             transport.start();
             while ((inputLine = stdIn.readLine()) != null) {
                 if (!inputLine.trim().equals("")) {
-                    String action = inputLine.split(" ")[0];
+                    if (context != null) {
+                        action = context;
+                        tokens = inputLine;
+                    } else {
+                        action = inputLine.split(" ")[0];
+                        tokens = "";
+                        if (inputLine.split(" ").length > 1) {
+                            tokens = inputLine.substring(action.length() + 1);
+                        }
+                    }
                     try {
-                        Message message = new Message(
-                            inputLine.substring(action.length() + 1)
-                        ).setAction(action);
+                        Message message = new Message(tokens).setAction(action);
                         if (context != null) {
                             message.setContext(context);
                         }
