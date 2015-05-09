@@ -1,14 +1,25 @@
 package com.github.alex_moon.porcupi.messages;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import com.google.gson.Gson;
 
 public class Message {
     protected String action;
-    protected long managerThreadId = 0;
+    protected long tid = 0;
     protected String context;
     protected String message;
-    protected Map<String, Object> track = new HashMap<String, Object>();
+
+    public static List<String> actions = Arrays.asList(
+        "poke"
+    );
+
+    public static Message fromJson(String json) {
+        return new Gson().fromJson(json, Message.class);
+    }
     
     public Message(String message) {
         this.message = message;
@@ -17,27 +28,24 @@ public class Message {
         return action != null;
     }
     public String toString() {
-        return String.format(
-            "action=%s thread=%s context=%s message=%s",
-            action,
-            managerThreadId,
-            context,
-            message
-        );
+        return new Gson().toJson(this);
     }
 
     public String getAction() {
         return action;
     }
-    public Message setAction(String action) {
+    public Message setAction(String action) throws MessageException {
+        if (!actions.contains(action)) {
+            throw new MessageException("Invalid action " + action);
+        }
         this.action = action;
         return this;
     }
-    public long getManagerThreadId() {
-        return managerThreadId;
+    public long getTid() {
+        return tid;
     }
-    public Message setManagerThreadId(long managerThreadId) {
-        this.managerThreadId = managerThreadId;
+    public Message setTid(long tid) {
+        this.tid = tid;
         return this;
     }
     public String getContext() {
@@ -46,13 +54,6 @@ public class Message {
     public Message setContext(String context) {
         this.context = context;
         return this;
-    }
-    public Message setTrack(Map<String, Object> track) {
-        this.track = track;
-        return this;
-    }
-    public Map<String, Object> getTrack() {
-        return track;
     }
     public String getMessage() {
         return message;

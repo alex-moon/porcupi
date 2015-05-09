@@ -7,12 +7,13 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import com.github.alex_moon.porcupi.messages.Message;
-
+import com.github.alex_moon.porcupi.messages.MessageException;
 import com.github.alex_moon.porcupi.Config;
 import com.github.alex_moon.porcupi.transport.Transport;
 
 public class ManagerClient implements Manager {
     private String inputLine;
+    private String context;
 
     public ManagerClient() {
         Socket socket;
@@ -23,8 +24,20 @@ public class ManagerClient implements Manager {
             transport = new Transport(socket, this);
             transport.start();
             while ((inputLine = stdIn.readLine()) != null) {
-                String action = inputLine.split(" ")[0];
-                transport.tellOut(new Message(inputLine).setAction(action));
+                if (!inputLine.trim().equals("")) {
+                    String action = inputLine.split(" ")[0];
+                    try {
+                        Message message = new Message(
+                            inputLine.substring(action.length() + 1)
+                        ).setAction(action);
+                        if (context != null) {
+                            message.setContext(context);
+                        }
+                        transport.tellOut(message);
+                    } catch (MessageException e) {
+                        System.out.println("Bad command: "  + e.getMessage());
+                    }
+                }
             }
             socket.close();
         } catch (UnknownHostException e1) {
@@ -35,11 +48,15 @@ public class ManagerClient implements Manager {
             System.exit(2);
         }
     }
-    
+
     public void tellIn(Message input) {
+        context = input.getContext();
         System.out.println("received from server: " + input.toString());
+        if (context != null) {
+            System.out.println("now operating in context " + context);
+        }
     }
-    
+
     public void tellOut(Message output) {
         // if we're at the end of the chain, this method won't have meaning
         // @todo make Teller abstract and implement a stub?

@@ -7,17 +7,21 @@ import com.github.alex_moon.porcupi.messages.Message;
 import com.github.alex_moon.porcupi.messages.PokeMessage;
 
 public abstract class Context {
-    protected long threadId;
+    protected long tid;
     protected Handler handler;
     protected Object monitor;
     protected List<String> messages = new ArrayList<String>();
     protected Boolean continuing = false;
 
-    public Context(long threadId, Handler handler) {
-        this.threadId = threadId;
+    public Context(long tid, Handler handler) {
+        this.tid = tid;
         this.handler = handler;
     }
     
+    public long getTid() {
+        return tid;
+    }
+
     public void activate() {
         // block! We want to wait on incoming to the handler...
         synchronized(this) {
@@ -37,12 +41,10 @@ public abstract class Context {
     }
     
     public void notify(Message messageObj) {
-        // this is presently never called - we have to read from incoming socket and handle
-        // in a context-specific manner
         messages.add(messageObj.getMessage());
         notify();
     }
-    
+
     public void handleMessage(String message) {
         if (message == "continue") {
             continuing = true;

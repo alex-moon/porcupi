@@ -12,7 +12,7 @@ import com.github.alex_moon.porcupi.controllers.Controller;
 import com.github.alex_moon.porcupi.handlers.PokeHandler;
 import com.github.alex_moon.porcupi.handlers.Pokeable;
 import com.github.alex_moon.porcupi.manager.ManagerServer;
-import com.github.alex_moon.porcupi.messages.Message;
+import com.github.alex_moon.porcupi.messages.PokeMessage;
 import com.github.alex_moon.porcupi.responses.Response;
 import com.google.gson.Gson;
 
@@ -39,8 +39,8 @@ public class View implements Pokeable {
 
         String routeToPoke = message.split(" ")[0];
         for (String routeFullName: routes.keySet()) {
-            System.out.println("trying to poke " + routeFullName + " with " + routeToPoke);
             if (routeToPoke.equals(routeFullName)) {
+                System.out.println("now poking " + routeFullName + " with " + routeToPoke);
                 poking.add(routeFullName);
                 return routeFullName;
             }
@@ -52,7 +52,7 @@ public class View implements Pokeable {
         for (String routeFullName : poking) {
             if (routeToPoke.equals(routeFullName)) {
                 ManagerServer.get().tellOut(
-                    new Message("routeToPoke")
+                    new PokeMessage(routeToPoke)
                 );
                 pokeHandler.activateContext(routeFullName);
             }

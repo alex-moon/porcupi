@@ -36,7 +36,7 @@ public class ManagerThread extends Thread implements Manager {
     }
     
     public void tellIn(Message input) {
-        input.setManagerThreadId(getId());
+        input.setTid(getId());
         server.tellIn(input);
     }
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import com.github.alex_moon.porcupi.messages.Message;
+import com.github.alex_moon.porcupi.messages.MessageException;
 
 public class TransportThread extends Thread {
     PrintWriter out;
@@ -22,8 +23,7 @@ public class TransportThread extends Thread {
     public void run() {
         try {
             while ((inputLine = in.readLine()) != null) {
-                String action = inputLine.split(" ")[0];
-                transport.tellIn(new Message(inputLine).setAction(action));
+                transport.tellIn(Message.fromJson(inputLine));
             }
         } catch (IOException e) {
             e.printStackTrace();

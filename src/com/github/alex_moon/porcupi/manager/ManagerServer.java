@@ -57,8 +57,8 @@ public class ManagerServer extends Thread {
     public void tellOut(Message output) {
         for (ManagerThread thread: threads) {
             if (
-                output.getManagerThreadId() == 0 ||
-                thread.getId() == output.getManagerThreadId()
+                output.getTid() == 0 ||
+                thread.getId() == output.getTid()
             ) {
                 thread.tellOut(output);
             }

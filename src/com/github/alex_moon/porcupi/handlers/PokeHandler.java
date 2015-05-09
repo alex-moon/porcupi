@@ -3,9 +3,9 @@ package com.github.alex_moon.porcupi.handlers;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.alex_moon.porcupi.messages.Message;
-
 import com.github.alex_moon.porcupi.manager.ManagerServer;
+import com.github.alex_moon.porcupi.messages.Message;
+import com.github.alex_moon.porcupi.messages.PokeMessage;
 
 public class PokeHandler implements Handler {
     private Pokeable pokeable;
@@ -16,16 +16,23 @@ public class PokeHandler implements Handler {
     }
     
     public void tellIn(Message input) {
-        long threadId = input.getManagerThreadId();
+        long tid = input.getTid();
 
-        // @todo this next if statement is a
-        // NullPointerException waiting to happen...
         if (input.getAction().equals("poke")) {
             String pokeKey = pokeable.poke(input.getMessage());
-            contexts.add(new PokeContext(threadId, this, pokeable, pokeKey));
-            tellOut(new Message(pokeKey));
+            if (pokeKey != null) {
+                contexts.add(new PokeContext(tid, this, pokeable, pokeKey));
+                tellOut(new PokeMessage(pokeKey).setTid(tid));
+            }
         }
-        // @todo context specific actions!!!
+
+        if (input.getContext() != null && input.getContext().equals("poke")) {
+            for (PokeContext context : contexts) {
+                if (input.getTid() == context.getTid()) {
+                    context.notify(input);
+                }
+            }
+        }
     }
     
     public void activateContext(String pokeKey) {
@@ -40,7 +47,7 @@ public class PokeHandler implements Handler {
         ManagerServer.get().tellOut(output);
     }
     
-    public void notify(long threadId, Object message) {
+    public void notify(long tid, Object message) {
         // @todo I'm not convinced we need this method - tellIn
         // should be able to handle it - we'd need a key for
         // "context" and I'm pretty sure that's all...
