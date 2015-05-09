@@ -22,14 +22,16 @@ public class PokeHandler implements Handler {
             String pokeKey = pokeable.poke(input.getMessage());
             if (pokeKey != null) {
                 contexts.add(new PokeContext(tid, this, pokeable, pokeKey));
-                tellOut(new PokeMessage(pokeKey).setTid(tid).setContext("poke"));
+                tellOut(new PokeMessage(pokeKey).setTid(tid));
             }
         }
 
         if (input.getContext() != null && input.getContext().equals("poke")) {
             for (PokeContext context : contexts) {
                 if (input.getTid() == context.getTid()) {
-                    context.notify(input);
+                    synchronized(context) {
+                        context.notify(input);
+                    }
                 }
             }
         }

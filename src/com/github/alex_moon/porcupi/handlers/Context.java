@@ -12,6 +12,7 @@ public abstract class Context {
     protected Object monitor;
     protected List<String> messages = new ArrayList<String>();
     protected Boolean continuing = false;
+    protected String context;
 
     public Context(long tid, Handler handler) {
         this.tid = tid;
@@ -23,15 +24,17 @@ public abstract class Context {
     }
 
     public void activate() {
+        System.out.println("IF YOU DO NOT SEE THIS WE ARE NOT BLOCKING");
         // block! We want to wait on incoming to the handler...
+        handler.tellOut(new PokeMessage("now poking lol").setContext(context));
         synchronized(this) {
             while (!continuing) {
                 try {
                     wait();
                     for (String message : messages) {
-                        messages.remove(message);
                         this.handleMessage(message);
                     }
+                    messages.clear();
                 } catch (InterruptedException e) {
                     return;
                 }
