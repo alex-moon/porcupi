@@ -1,8 +1,10 @@
-package com.github.alex_moon.porcupi.handlers;
+package com.github.alex_moon.porcupi.contexts;
 
 import java.util.Arrays;
 import java.util.Map;
 
+import com.github.alex_moon.porcupi.handlers.PokeHandler;
+import com.github.alex_moon.porcupi.handlers.Pokeable;
 import com.github.alex_moon.porcupi.messages.PokeContextMessage;
 
 

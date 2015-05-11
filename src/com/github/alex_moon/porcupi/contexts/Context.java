@@ -1,8 +1,9 @@
-package com.github.alex_moon.porcupi.handlers;
+package com.github.alex_moon.porcupi.contexts;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.alex_moon.porcupi.handlers.Handler;
 import com.github.alex_moon.porcupi.messages.Message;
 import com.github.alex_moon.porcupi.messages.PokeMessage;
 
