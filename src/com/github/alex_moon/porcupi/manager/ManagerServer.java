@@ -10,7 +10,7 @@ import com.github.alex_moon.porcupi.messages.Message;
 import com.github.alex_moon.porcupi.Config;
 import com.github.alex_moon.porcupi.handlers.Handler;
 
-public class ManagerServer extends Thread {
+public class ManagerServer implements Manager {
     private static ManagerServer server;
     private List<ManagerThread> threads = new ArrayList<ManagerThread>();
     private List<Handler> handlers = new ArrayList<Handler>();

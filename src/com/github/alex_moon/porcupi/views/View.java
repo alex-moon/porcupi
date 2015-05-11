@@ -51,8 +51,8 @@ public class View implements Pokeable {
     private void pokeHandle(String routeToPoke) {
         for (String routeFullName : poking) {
             if (routeToPoke.equals(routeFullName)) {
-                ManagerServer.get().tellOut(
-                    new PokeMessage(routeToPoke)
+                pokeHandler.tellOut(
+                    new PokeMessage(routeToPoke).setTid(69)
                 );
                 pokeHandler.activateContext(routeFullName);
             }
