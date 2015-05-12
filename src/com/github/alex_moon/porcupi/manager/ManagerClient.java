@@ -37,7 +37,7 @@ public class ManagerClient implements Manager {
                         }
                     }
                     try {
-                        Message message = new Message(tokens).setAction(action);
+                        Message message = new Message(tokens, 696969).setAction(action);
                         if (context != null) {
                             message.setContext(context);
                         }
@@ -58,11 +58,17 @@ public class ManagerClient implements Manager {
     }
 
     public void tellIn(Message input) {
+        if (input.getContext() != null) {
+            if (!input.getContext().equals(context)) {
+                System.out.println("now operating in context " + input.getContext());
+            }
+        } else {
+            if (context != null) {
+                System.out.println("closing context " + context);
+            }
+        }
         context = input.getContext();
         System.out.println("received from server: " + input.toString());
-        if (context != null) {
-            System.out.println("now operating in context " + context);
-        }
     }
 
     public void tellOut(Message output) {

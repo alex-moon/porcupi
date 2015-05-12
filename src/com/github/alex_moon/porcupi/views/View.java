@@ -52,7 +52,7 @@ public class View implements Pokeable {
         for (String routeFullName : poking) {
             if (routeToPoke.equals(routeFullName)) {
                 pokeHandler.tellOut(
-                    new PokeMessage(routeToPoke).setTid(69)
+                    new PokeMessage(routeToPoke, 69696942)
                 );
                 pokeHandler.activateContext(routeFullName);
             }
@@ -66,7 +66,7 @@ public class View implements Pokeable {
     public void get(String urlPattern, String routeName, Route route) {
         String routeFullName = name + ":" + routeName;
         Spark.get(urlPattern, (request, response) -> {
-            track.put("request", request);
+            track.put("request", request.url());
             pokeHandle(routeFullName);
             Object result = route.handle(request, response);
             track.put("result", result);
@@ -79,7 +79,7 @@ public class View implements Pokeable {
     public void post(String urlPattern, String routeName, Route route) {
         String routeFullName = name + ":" + routeName;
         Spark.post(urlPattern, (request, response) -> {
-            track.put("request", request);
+            track.put("request", request.body());
             pokeHandle(routeFullName);
             Object result = route.handle(request, response);
             track.put("result", result);

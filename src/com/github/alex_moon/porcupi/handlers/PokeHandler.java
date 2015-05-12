@@ -23,7 +23,7 @@ public class PokeHandler implements Handler {
             String pokeKey = pokeable.poke(input.getMessage());
             if (pokeKey != null) {
                 contexts.add(new PokeContext(tid, this, pokeable, pokeKey));
-                tellOut(new PokeMessage(pokeKey).setTid(tid));
+                tellOut(new PokeMessage(pokeKey, tid));
             }
         }
 

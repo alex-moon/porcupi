@@ -24,6 +24,7 @@ public class PokeContext extends Context {
     }
     
     public void handleMessage(String message) {
+        super.handleMessage(message);
         String[] tokens = message.split(" ");
         if (tokens[0].equals("track")) {
             Map<String, Object> track = pokeable.getTrack();
@@ -31,13 +32,15 @@ public class PokeContext extends Context {
             for (String token : tokens) {
                 if (track.containsKey(token)) {
                     handler.tellOut(
-                        new PokeContextMessage(token + ": " + track.get(token).toString())
-                        .setTid(tid)
+                        new PokeContextMessage(
+                            token + ": " + track.get(token).toString(), tid
+                        )
                     );
                 } else {
                     handler.tellOut(
-                        new PokeContextMessage(token + " not tracked")
-                        .setTid(tid)
+                        new PokeContextMessage(
+                            token + " not tracked", tid
+                        )
                     );
                 }
             }

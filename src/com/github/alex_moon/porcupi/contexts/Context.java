@@ -25,9 +25,9 @@ public abstract class Context {
     }
 
     public void activate() {
-        System.out.println("IF YOU DO NOT SEE THIS WE ARE NOT BLOCKING");
+        System.out.println("--blocking--");
         // block! We want to wait on incoming to the handler...
-        handler.tellOut(new PokeMessage("now poking lol").setContext(context));
+        handler.tellOut(new Message("activated", tid).setContext(context));
         synchronized(this) {
             while (!continuing) {
                 try {
@@ -40,21 +40,20 @@ public abstract class Context {
                     return;
                 }
             }
+            System.out.println("--no longer blocking--");
             continuing = false;
         }
     }
     
-    public void notify(Message messageObj) {
-        messages.add(messageObj.getMessage());
+    public void notify(Message input) {
+        messages.add(input.getMessage());
         notify();
     }
 
     public void handleMessage(String message) {
-        if (message == "continue") {
+        System.out.println("Trying to handle message " + message);
+        if (message.equals("continue")) {
             continuing = true;
         }
-        handler.tellOut(
-            new PokeMessage("what are you doing lol")
-        );
     }
 }
