@@ -1,16 +1,16 @@
 package com.github.alex_moon.porcupi.handlers;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.github.alex_moon.porcupi.contexts.PokeContext;
-import com.github.alex_moon.porcupi.manager.ManagerServer;
 import com.github.alex_moon.porcupi.messages.Message;
 import com.github.alex_moon.porcupi.messages.PokeMessage;
+import com.github.alex_moon.porcupi.shell.ShellServer;
 
 public class PokeHandler implements Handler {
     private Pokeable pokeable;
-    private List<PokeContext> contexts = new ArrayList<PokeContext>();
+    private Map<String, PokeContext> contexts = new HashMap<String, PokeContext>();
     
     public PokeHandler(Pokeable pokeable) {
         this.pokeable = pokeable;
@@ -22,13 +22,15 @@ public class PokeHandler implements Handler {
         if (input.getAction().equals("poke")) {
             String pokeKey = pokeable.poke(input.getMessage());
             if (pokeKey != null) {
-                contexts.add(new PokeContext(tid, this, pokeable, pokeKey));
+                contexts.put(pokeKey, new PokeContext(tid, this, pokeable, pokeKey));
                 tellOut(new PokeMessage(pokeKey, tid));
             }
         }
 
         if (input.getContext() != null && input.getContext().equals("poke")) {
-            for (PokeContext context : contexts) {
+            // @todo not really convinced by this - why not
+            // put the pokeKey in the incoming message?
+            for (PokeContext context : contexts.values()) {
                 if (input.getTid() == context.getTid()) {
                     synchronized(context) {
                         context.notify(input);
@@ -39,20 +41,12 @@ public class PokeHandler implements Handler {
     }
     
     public void activateContext(String pokeKey) {
-        for (PokeContext context : contexts) {
-            if (context.getKey() == pokeKey) {
-                context.activate();
-            }
+        if (contexts.containsKey(pokeKey)) {
+            contexts.get(pokeKey).activate();
         }
     }
     
     public void tellOut(Message output) {
-        ManagerServer.get().tellOut(output);
-    }
-    
-    public void notify(long tid, Object message) {
-        // @todo I'm not convinced we need this method - tellIn
-        // should be able to handle it - we'd need a key for
-        // "context" and I'm pretty sure that's all...
+        ShellServer.get().tellOut(output);
     }
 }

@@ -1,26 +1,26 @@
-package com.github.alex_moon.porcupi.manager;
+package com.github.alex_moon.porcupi.shell;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.alex_moon.porcupi.Config;
+import com.github.alex_moon.porcupi.Tellable;
+import com.github.alex_moon.porcupi.handlers.Handler;
 import com.github.alex_moon.porcupi.messages.Message;
 
-import com.github.alex_moon.porcupi.Config;
-import com.github.alex_moon.porcupi.handlers.Handler;
-
-public class ManagerServer extends Thread implements Manager {
-    private static ManagerServer server;
-    private List<ManagerThread> threads = new ArrayList<ManagerThread>();
+public class ShellServer extends Thread implements Tellable {
+    private static ShellServer server;
+    private List<ShellThread> threads = new ArrayList<ShellThread>();
     private List<Handler> handlers = new ArrayList<Handler>();
     private ServerSocket serverSocket;
     
-    public static ManagerServer get() {
+    public static ShellServer get() {
         return server;
     }
     
-    public ManagerServer() {
+    public ShellServer() {
         server = this;
         this.start();
     }
@@ -29,7 +29,7 @@ public class ManagerServer extends Thread implements Manager {
         try {
             serverSocket = new ServerSocket(Config.managerPort);
             while (true) {
-                ManagerThread newThread = new ManagerThread(this, serverSocket.accept());
+                ShellThread newThread = new ShellThread(this, serverSocket.accept());
                 threads.add(newThread);
                 newThread.start();
             }
@@ -39,7 +39,7 @@ public class ManagerServer extends Thread implements Manager {
         }
     }
     
-    public void remove(ManagerThread thread) {
+    public void remove(ShellThread thread) {
         threads.remove(thread);
     }
     
@@ -55,7 +55,7 @@ public class ManagerServer extends Thread implements Manager {
     }
     
     public void tellOut(Message output) {
-        for (ManagerThread thread: threads) {
+        for (ShellThread thread: threads) {
             if (
                 output.getTid() == 0 ||
                 thread.getId() == output.getTid()

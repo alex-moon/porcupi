@@ -21,24 +21,23 @@ public class Message {
         return new Gson().fromJson(json, Message.class);
     }
 
+    public Message(String message) {
+        this.message = message;
+    }
+
     public Message(String message, long tid) {
         this.message = message;
         this.tid = tid;
-    }
-
-    public Boolean isValid() {
-        return action != null;
     }
 
     public String toString() {
         return new Gson().toJson(this);
     }
 
+    // setters/getters
     public String getAction() {
         return action;
     }
-
-    // setters/getters
     public Message setAction(String action) throws MessageException {
         if (!actions.contains(action)) {
             throw new MessageException("Invalid action " + action);

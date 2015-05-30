@@ -7,17 +7,16 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import com.github.alex_moon.porcupi.messages.Message;
-
-import com.github.alex_moon.porcupi.manager.Manager;
+import com.github.alex_moon.porcupi.Tellable;
 
 public class Transport extends Thread {
     private Socket socket;
-    private Manager manager;
+    private Tellable shell;
     private TransportThread thread;
 
-    public Transport(Socket socket, Manager manager) {
+    public Transport(Socket socket, Tellable shell) {
         this.socket = socket;
-        this.manager = manager;
+        this.shell = shell;
     }
     
     public void run() {
@@ -41,7 +40,7 @@ public class Transport extends Thread {
     }
 
     public void tellIn(Message input) {
-        manager.tellIn(input);
+        shell.tellIn(input);
     }
     
     public void tellOut(Message output) {

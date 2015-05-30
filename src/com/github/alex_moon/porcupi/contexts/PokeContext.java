@@ -24,6 +24,7 @@ public class PokeContext extends Context {
     }
     
     public void handleMessage(String message) {
+        // @todo not a fan of this super - get the superclass to call something
         super.handleMessage(message);
         String[] tokens = message.split(" ");
         if (tokens[0].equals("track")) {

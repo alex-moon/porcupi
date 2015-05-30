@@ -1,4 +1,4 @@
-package com.github.alex_moon.porcupi.manager;
+package com.github.alex_moon.porcupi.shell;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,16 +6,17 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import com.github.alex_moon.porcupi.Config;
+import com.github.alex_moon.porcupi.Tellable;
 import com.github.alex_moon.porcupi.messages.Message;
 import com.github.alex_moon.porcupi.messages.MessageException;
-import com.github.alex_moon.porcupi.Config;
 import com.github.alex_moon.porcupi.transport.Transport;
 
-public class ManagerClient implements Manager {
+public class ShellClient implements Tellable {
     private String inputLine;
     private String context;
 
-    public ManagerClient() {
+    public ShellClient() {
         Socket socket;
         Transport transport;
         try {
@@ -24,6 +25,7 @@ public class ManagerClient implements Manager {
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
             transport = new Transport(socket, this);
             transport.start();
+            // @todo use jline - do this properly
             while ((inputLine = stdIn.readLine()) != null) {
                 if (!inputLine.trim().equals("")) {
                     if (context != null) {
@@ -37,7 +39,7 @@ public class ManagerClient implements Manager {
                         }
                     }
                     try {
-                        Message message = new Message(tokens, 696969).setAction(action);
+                        Message message = new Message(tokens).setAction(action);
                         if (context != null) {
                             message.setContext(context);
                         }
@@ -64,9 +66,11 @@ public class ManagerClient implements Manager {
             }
         } else {
             if (context != null) {
+                // @todo not really convinced here - why close the context?
                 System.out.println("closing context " + context);
             }
         }
+        // @todo surely we can handle multiple contexts
         context = input.getContext();
         System.out.println("received from server: " + input.toString());
     }

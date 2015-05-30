@@ -1,21 +1,19 @@
-package com.github.alex_moon.porcupi.manager;
+package com.github.alex_moon.porcupi.shell;
 
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
+import com.github.alex_moon.porcupi.Tellable;
 import com.github.alex_moon.porcupi.messages.Message;
-
 import com.github.alex_moon.porcupi.transport.Transport;
 
-public class ManagerThread extends Thread implements Manager {
-    private ManagerServer server;
+public class ShellThread extends Thread implements Tellable {
+    private ShellServer server;
     private Socket socket;
     private Transport transport;
     
     public Boolean poking = false;
 
-    public ManagerThread(ManagerServer server, Socket socket) {
+    public ShellThread(ShellServer server, Socket socket) {
         this.server = server;
         this.socket = socket;
     }

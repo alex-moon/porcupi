@@ -11,9 +11,9 @@ import spark.Spark;
 import com.github.alex_moon.porcupi.controllers.Controller;
 import com.github.alex_moon.porcupi.handlers.PokeHandler;
 import com.github.alex_moon.porcupi.handlers.Pokeable;
-import com.github.alex_moon.porcupi.manager.ManagerServer;
 import com.github.alex_moon.porcupi.messages.PokeMessage;
 import com.github.alex_moon.porcupi.responses.Response;
+import com.github.alex_moon.porcupi.shell.ShellServer;
 import com.google.gson.Gson;
 
 public class View implements Pokeable {
@@ -29,7 +29,7 @@ public class View implements Pokeable {
         this.name = name;
         this.controller = controller;
         pokeHandler = new PokeHandler(this);
-        ManagerServer.get().registerHandler(pokeHandler);
+        ShellServer.get().registerHandler(pokeHandler);
     }
     
     public String poke(String message) {
@@ -52,7 +52,7 @@ public class View implements Pokeable {
         for (String routeFullName : poking) {
             if (routeToPoke.equals(routeFullName)) {
                 pokeHandler.tellOut(
-                    new PokeMessage(routeToPoke, 69696942)
+                    new PokeMessage(routeToPoke)
                 );
                 pokeHandler.activateContext(routeFullName);
             }

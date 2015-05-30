@@ -15,7 +15,7 @@ public class AccountView extends View {
         get("/account/:accountNumber/", "get", this::getAccount);
         post("/account/", "post", this::postAccount);
     }
-    
+
     public String getAccount(Request request, Response response) {
         String accountNumber = request.params(":accountNumber");
         account = AccountController.getByAccountNumber(accountNumber);
@@ -27,7 +27,7 @@ public class AccountView extends View {
         }
         return success(account);
     }
-    
+
     public String postAccount(Request request, Response response) {
         account = gson.fromJson(request.body(), Account.class);
         controller.createOrUpdate(account);
