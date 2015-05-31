@@ -5,19 +5,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.List;
 
-import com.github.alex_moon.porcupi.manager.Manager;
-import com.google.gson.Gson;
+import com.github.alex_moon.porcupi.messages.Message;
+import com.github.alex_moon.porcupi.Tellable;
 
 public class Transport extends Thread {
     private Socket socket;
-    private Manager manager;
+    private Tellable shell;
     private TransportThread thread;
 
-    public Transport(Socket socket, Manager manager) {
+    public Transport(Socket socket, Tellable shell) {
         this.socket = socket;
-        this.manager = manager;
+        this.shell = shell;
     }
     
     public void run() {
@@ -40,19 +39,13 @@ public class Transport extends Thread {
         }
     }
 
-    public List<String> manage(String inputLine) {
-        return manager.manage(inputLine);
+    public void tellIn(Message input) {
+        shell.tellIn(input);
     }
     
-    public void tell(String inputLine) {
+    public void tellOut(Message output) {
         if (thread != null) {
-            thread.tell(inputLine);
-        }
-    }
-
-    public void tell(List<String> inputLines) {
-        if (thread != null) {
-            thread.tell(inputLines);
+            thread.tellOut(output);
         }
     }
 }

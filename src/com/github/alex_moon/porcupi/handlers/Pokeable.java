@@ -1,7 +1,8 @@
 package com.github.alex_moon.porcupi.handlers;
 
-import java.util.List;
+import java.util.Map;
 
 public interface Pokeable {
-    public String poke(List<String> tokens);
+    public String poke(String message);
+    public Map<String, Object> getTrack();
 }

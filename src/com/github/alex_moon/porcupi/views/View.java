@@ -11,14 +11,15 @@ import spark.Spark;
 import com.github.alex_moon.porcupi.controllers.Controller;
 import com.github.alex_moon.porcupi.handlers.PokeHandler;
 import com.github.alex_moon.porcupi.handlers.Pokeable;
-import com.github.alex_moon.porcupi.manager.ManagerServer;
+import com.github.alex_moon.porcupi.messages.PokeMessage;
 import com.github.alex_moon.porcupi.responses.Response;
+import com.github.alex_moon.porcupi.shell.ShellServer;
 import com.google.gson.Gson;
 
 public class View implements Pokeable {
     protected static Gson gson = new Gson();
+    protected Map<String, Object> track = new HashMap<String, Object>();
     protected Controller controller;
-    protected Object pokeMonitor = new Object();
     protected PokeHandler pokeHandler;
     protected List<String> poking = new ArrayList<String>();
     protected Map<String, Route> routes = new HashMap<String, Route>();
@@ -28,50 +29,48 @@ public class View implements Pokeable {
         this.name = name;
         this.controller = controller;
         pokeHandler = new PokeHandler(this);
-        ManagerServer.get().registerHandler(pokeHandler);
+        ShellServer.get().registerHandler(pokeHandler);
     }
     
-    public String poke(List<String> tokens) {
-        String routeToPoke = tokens.get(0);
+    public String poke(String message) {
+        if (message == null) {
+            return "please specify a route to poke";
+        }
+
+        String routeToPoke = message.split(" ")[0];
         for (String routeFullName: routes.keySet()) {
-            System.out.println("trying to poke " + routeFullName + " with " + routeToPoke);
             if (routeToPoke.equals(routeFullName)) {
+                System.out.println("now poking " + routeFullName + " with " + routeToPoke);
                 poking.add(routeFullName);
-                return "now poking " + routeFullName;
+                return routeFullName;
             }
         }
         return null;
     }
     
-    private void pokeHandle(String routeToPoke, Object track) {
+    private void pokeHandle(String routeToPoke) {
         for (String routeFullName : poking) {
             if (routeToPoke.equals(routeFullName)) {
-                ManagerServer.get().tell("now at " + routeToPoke + " - what would you like to do?");
-                /* synchronized (pokeMonitor) {
-                    try {
-                        // @todo pass pokeMonitor to a "contextHandler" of some kind... 
-                        pokeMonitor.wait();
-                    } catch (InterruptedException e) {
-                        return;
-                    }
-                } */
-                ManagerServer.get().tell(track.toString());
+                pokeHandler.tellOut(
+                    new PokeMessage(routeToPoke)
+                );
+                pokeHandler.activateContext(routeFullName);
             }
         }
     }
-    
-    public void pokeContinue() {
-        synchronized (pokeMonitor) {
-            pokeMonitor.notify();
-        }
+
+    public Map<String, Object> getTrack() {
+        return track;
     }
 
     public void get(String urlPattern, String routeName, Route route) {
         String routeFullName = name + ":" + routeName;
         Spark.get(urlPattern, (request, response) -> {
-            pokeHandle(routeFullName, request);
+            track.put("request", request.url());
+            pokeHandle(routeFullName);
             Object result = route.handle(request, response);
-            pokeHandle(routeFullName, result);
+            track.put("result", result);
+            pokeHandle(routeFullName);
             return result;
         });
         routes.put(routeFullName, route);
@@ -80,9 +79,11 @@ public class View implements Pokeable {
     public void post(String urlPattern, String routeName, Route route) {
         String routeFullName = name + ":" + routeName;
         Spark.post(urlPattern, (request, response) -> {
-            pokeHandle(routeFullName, request);
+            track.put("request", request.body());
+            pokeHandle(routeFullName);
             Object result = route.handle(request, response);
-            pokeHandle(routeFullName, result);
+            track.put("result", result);
+            pokeHandle(routeFullName);
             return result;
         });
         routes.put(routeFullName, route);

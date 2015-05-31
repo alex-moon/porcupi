@@ -1,8 +1,5 @@
 package com.github.alex_moon.porcupi.handlers;
 
-import java.util.List;
+import com.github.alex_moon.porcupi.Tellable;
 
-public interface Handler {
-    public String handle(String key, List<String> tokens);
-    public Boolean canHandle(String key);
-}
+public interface Handler extends Tellable {}
