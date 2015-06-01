@@ -48,10 +48,10 @@ public class ShellClient implements Tellable {
                             message.setContext(context);
                         }
                         transport.tellOut(message);
-                        console.setPrompt("");
                     } catch (MessageException e) {
                         debug("Bad command: "  + e.getMessage());
                     }
+                    console.setPrompt("");
                 }
             }
             socket.close();
@@ -77,18 +77,9 @@ public class ShellClient implements Tellable {
     }
     
     private void setContext(String inputContext) {
-        context = inputContext;
-        if (context != null) {
-            console.setPrompt("porcupi:" + context + "> ");
-        } else {
-            console.setPrompt("porcupi> ");
-        }
-    }
-
-    public void tellIn(Message input) {
-        if (input.getContext() != null) {
-            if (!input.getContext().equals(context)) {
-                debug("now operating in context " + input.getContext());
+        if (inputContext != null) {
+            if (!inputContext.equals(context)) {
+                debug("now operating in context " + inputContext);
             }
         } else {
             if (context != null) {
@@ -97,14 +88,22 @@ public class ShellClient implements Tellable {
             }
         }
         // @todo surely we can handle multiple contexts
+        context = inputContext;
+        if (context != null) {
+            setPrompt("porcupi:" + context + "> ");
+        } else {
+            setPrompt("porcupi> ");
+        }
+    }
+
+    public void tellIn(Message input) {
         setContext(input.getContext());
         debug("received from server: " + input.toString());
-        console.setPrompt(prompt);
     }
 
     public void tellOut(Message output) {
         // if we're at the end of the chain, this method won't have meaning
-        // @todo make Teller abstract and implement a stub?
+        // @todo make Tellable abstract and implement a stub?
         debug("HOW DID THIS HAPPEN?: " + output.toString());
     }
     
@@ -117,7 +116,6 @@ public class ShellClient implements Tellable {
         try {
             console.println("debug: " + messageString);
             resetConsole();
-            console.flush();
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("CONSOLE IS BROKEN: " + messageString);

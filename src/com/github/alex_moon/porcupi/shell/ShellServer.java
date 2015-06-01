@@ -3,16 +3,19 @@ package com.github.alex_moon.porcupi.shell;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.github.alex_moon.porcupi.Config;
 import com.github.alex_moon.porcupi.Tellable;
 import com.github.alex_moon.porcupi.handlers.Handler;
+import com.github.alex_moon.porcupi.messages.Ack;
 import com.github.alex_moon.porcupi.messages.Message;
 
 public class ShellServer extends Thread implements Tellable {
     private static ShellServer server;
-    private List<ShellThread> threads = new ArrayList<ShellThread>();
+    private Map<Long, ShellThread> threads = new HashMap<Long, ShellThread>();
     private List<Handler> handlers = new ArrayList<Handler>();
     private ServerSocket serverSocket;
     
@@ -30,7 +33,7 @@ public class ShellServer extends Thread implements Tellable {
             serverSocket = new ServerSocket(Config.managerPort);
             while (true) {
                 ShellThread newThread = new ShellThread(this, serverSocket.accept());
-                threads.add(newThread);
+                threads.put(newThread.getId(), newThread);
                 newThread.start();
             }
         } catch (IOException e) {
@@ -52,10 +55,11 @@ public class ShellServer extends Thread implements Tellable {
         for (Handler handler : handlers) {
             handler.tellIn(input);
         }
+        tellOut(new Ack(input.getTid()));
     }
     
     public void tellOut(Message output) {
-        for (ShellThread thread: threads) {
+        for (ShellThread thread: threads.values()) {
             if (
                 output.getTid() == 0 ||
                 thread.getId() == output.getTid()
